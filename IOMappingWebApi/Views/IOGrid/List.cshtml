@@ -1,0 +1,33 @@
+﻿@model List<IOMappingWebApi.Model.InstanceContent>
+
+
+<div id="grid_array" style="margin:25px;"></div>
+
+
+@section scripts
+    {
+<script>
+        $(function () {
+            var data = [];
+
+            @foreach (var CL in Model)
+            {
+                @:data.push(['@CL.PLCTag.Name', '@CL.Instance.Name']);
+            }
+
+            var obj = {
+                numberCell: { resizable: true, title: "#", width: 30, minWidth: 30 },
+                editor: { type: 'textbox' },
+                title: "ParamQuery Grid with Array data",
+                resizable: true,
+                scrollModel: { autoFit: true, theme: true }
+            };
+            obj.colModel = [
+                { title: "PLC Name", width: 200, dataType: "string" },
+                { title: "Instance Name", width: 200, dataType: "string" }
+            ];
+            obj.dataModel = { data: data };
+            $("#grid_array").pqGrid(obj);
+        });
+</script>
+    }

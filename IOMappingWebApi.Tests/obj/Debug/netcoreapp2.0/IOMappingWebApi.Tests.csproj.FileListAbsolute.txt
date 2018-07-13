@@ -1,0 +1,51 @@
+C:\Users\egonzalez\Documents\Visual Studio 2017\Projects\IOMappingWebApi\IOMappingWebApi.Tests\obj\Debug\netcoreapp2.0\IOMappingWebApi.Tests.csprojResolveAssemblyReference.cache
+C:\Users\egonzalez\Documents\Visual Studio 2017\Projects\IOMappingWebApi\IOMappingWebApi.Tests\obj\Debug\netcoreapp2.0\IOMappingWebApi.Tests.csproj.CoreCompileInputs.cache
+C:\Users\egonzalez\Documents\Visual Studio 2017\Projects\IOMappingWebApi\IOMappingWebApi.Tests\obj\Debug\netcoreapp2.0\IOMappingWebApi.Tests.AssemblyInfoInputs.cache
+C:\Users\egonzalez\Documents\Visual Studio 2017\Projects\IOMappingWebApi\IOMappingWebApi.Tests\obj\Debug\netcoreapp2.0\IOMappingWebApi.Tests.AssemblyInfo.cs
+C:\Users\egonzalez\Documents\Visual Studio 2017\Projects\IOMappingWebApi\IOMappingWebApi.Tests\bin\Debug\netcoreapp2.0\xunit.runner.visualstudio.dotnetcore.testadapter.dll
+C:\Users\egonzalez\Documents\Visual Studio 2017\Projects\IOMappingWebApi\IOMappingWebApi.Tests\bin\Debug\netcoreapp2.0\xunit.runner.reporters.netcoreapp10.dll
+C:\Users\egonzalez\Documents\Visual Studio 2017\Projects\IOMappingWebApi\IOMappingWebApi.Tests\bin\Debug\netcoreapp2.0\xunit.runner.utility.netcoreapp10.dll
+C:\Users\egonzalez\Documents\Visual Studio 2017\Projects\IOMappingWebApi\IOMappingWebApi.Tests\bin\Debug\netcoreapp2.0\IOMappingWebApi.Tests.deps.json
+C:\Users\egonzalez\Documents\Visual Studio 2017\Projects\IOMappingWebApi\IOMappingWebApi.Tests\bin\Debug\netcoreapp2.0\IOMappingWebApi.Tests.runtimeconfig.json
+C:\Users\egonzalez\Documents\Visual Studio 2017\Projects\IOMappingWebApi\IOMappingWebApi.Tests\bin\Debug\netcoreapp2.0\IOMappingWebApi.Tests.runtimeconfig.dev.json
+C:\Users\egonzalez\Documents\Visual Studio 2017\Projects\IOMappingWebApi\IOMappingWebApi.Tests\bin\Debug\netcoreapp2.0\IOMappingWebApi.Tests.dll
+C:\Users\egonzalez\Documents\Visual Studio 2017\Projects\IOMappingWebApi\IOMappingWebApi.Tests\bin\Debug\netcoreapp2.0\IOMappingWebApi.dll
+C:\Users\egonzalez\Documents\Visual Studio 2017\Projects\IOMappingWebApi\IOMappingWebApi.Tests\bin\Debug\netcoreapp2.0\IOMappingWebApi.pdb
+C:\Users\egonzalez\Documents\Visual Studio 2017\Projects\IOMappingWebApi\IOMappingWebApi.Tests\obj\Debug\netcoreapp2.0\IOMappingWebApi.Tests.csproj.CopyComplete
+C:\Users\egonzalez\Documents\Visual Studio 2017\Projects\IOMappingWebApi\IOMappingWebApi.Tests\bin\Debug\netcoreapp2.0\IOMappingWebApi.Tests.pdb
+C:\Users\egonzalez\Documents\Visual Studio 2017\Projects\IOMappingWebApi\IOMappingWebApi.Tests\obj\Debug\netcoreapp2.0\IOMappingWebApi.Tests.dll
+C:\Users\egonzalez\Documents\Visual Studio 2017\Projects\IOMappingWebApi\IOMappingWebApi.Tests\obj\Debug\netcoreapp2.0\IOMappingWebApi.Tests.pdb
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\obj\Debug\netcoreapp2.0\IOMappingWebApi.Tests.csprojAssemblyReference.cache
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\obj\Debug\netcoreapp2.0\IOMappingWebApi.Tests.csproj.CoreCompileInputs.cache
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\obj\Debug\netcoreapp2.0\IOMappingWebApi.Tests.AssemblyInfoInputs.cache
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\obj\Debug\netcoreapp2.0\IOMappingWebApi.Tests.AssemblyInfo.cs
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\obj\Debug\netcoreapp2.0\IOMappingWebApi.Tests.dll
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\obj\Debug\netcoreapp2.0\IOMappingWebApi.Tests.pdb
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\bin\Debug\netcoreapp2.0\xunit.runner.visualstudio.dotnetcore.testadapter.dll
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\bin\Debug\netcoreapp2.0\xunit.runner.reporters.netcoreapp10.dll
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\bin\Debug\netcoreapp2.0\xunit.runner.utility.netcoreapp10.dll
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\bin\Debug\netcoreapp2.0\IOMappingWebApi.Tests.deps.json
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\bin\Debug\netcoreapp2.0\IOMappingWebApi.Tests.runtimeconfig.json
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\bin\Debug\netcoreapp2.0\IOMappingWebApi.Tests.runtimeconfig.dev.json
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\bin\Debug\netcoreapp2.0\IOMappingWebApi.Tests.dll
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\bin\Debug\netcoreapp2.0\IOMappingWebApi.Tests.pdb
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\bin\Debug\netcoreapp2.0\IOMappingWebApi.dll
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\bin\Debug\netcoreapp2.0\IOMappingWebApi.pdb
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\obj\Debug\netcoreapp2.0\IOMappingWebApi.Tests.csproj.CopyComplete
+C:\Users\egonzalez\My Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\bin\Debug\netcoreapp2.0\xunit.runner.visualstudio.dotnetcore.testadapter.dll
+C:\Users\egonzalez\My Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\bin\Debug\netcoreapp2.0\xunit.runner.reporters.netcoreapp10.dll
+C:\Users\egonzalez\My Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\bin\Debug\netcoreapp2.0\xunit.runner.utility.netcoreapp10.dll
+C:\Users\egonzalez\My Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\bin\Debug\netcoreapp2.0\IOMappingWebApi.Tests.deps.json
+C:\Users\egonzalez\My Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\bin\Debug\netcoreapp2.0\IOMappingWebApi.Tests.runtimeconfig.json
+C:\Users\egonzalez\My Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\bin\Debug\netcoreapp2.0\IOMappingWebApi.Tests.runtimeconfig.dev.json
+C:\Users\egonzalez\My Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\bin\Debug\netcoreapp2.0\IOMappingWebApi.Tests.dll
+C:\Users\egonzalez\My Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\bin\Debug\netcoreapp2.0\IOMappingWebApi.Tests.pdb
+C:\Users\egonzalez\My Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\bin\Debug\netcoreapp2.0\IOMappingWebApi.dll
+C:\Users\egonzalez\My Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\bin\Debug\netcoreapp2.0\IOMappingWebApi.pdb
+C:\Users\egonzalez\My Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\obj\Debug\netcoreapp2.0\IOMappingWebApi.Tests.csprojAssemblyReference.cache
+C:\Users\egonzalez\My Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\obj\Debug\netcoreapp2.0\IOMappingWebApi.Tests.csproj.CoreCompileInputs.cache
+C:\Users\egonzalez\My Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\obj\Debug\netcoreapp2.0\IOMappingWebApi.Tests.AssemblyInfoInputs.cache
+C:\Users\egonzalez\My Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\obj\Debug\netcoreapp2.0\IOMappingWebApi.Tests.AssemblyInfo.cs
+C:\Users\egonzalez\My Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\obj\Debug\netcoreapp2.0\IOMappingWebApi.Tests.csproj.CopyComplete
+C:\Users\egonzalez\My Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\obj\Debug\netcoreapp2.0\IOMappingWebApi.Tests.dll
+C:\Users\egonzalez\My Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi.Tests\obj\Debug\netcoreapp2.0\IOMappingWebApi.Tests.pdb

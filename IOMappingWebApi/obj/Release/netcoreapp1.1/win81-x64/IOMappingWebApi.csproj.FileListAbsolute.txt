@@ -1,0 +1,14 @@
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi\bin\Release\netcoreapp1.1\win81-x64\hostpolicy.dll
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi\bin\Release\netcoreapp1.1\win81-x64\hostfxr.dll
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi\bin\Release\netcoreapp1.1\win81-x64\IOMappingWebApi.exe
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi\bin\Release\netcoreapp1.1\win81-x64\IOMappingWebApi.deps.json
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi\bin\Release\netcoreapp1.1\win81-x64\IOMappingWebApi.runtimeconfig.json
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi\bin\Release\netcoreapp1.1\win81-x64\IOMappingWebApi.runtimeconfig.dev.json
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi\bin\Release\netcoreapp1.1\win81-x64\IOMappingWebApi.dll
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi\bin\Release\netcoreapp1.1\win81-x64\IOMappingWebApi.pdb
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi\obj\Release\netcoreapp1.1\win81-x64\IOMappingWebApi.csprojAssemblyReference.cache
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi\obj\Release\netcoreapp1.1\win81-x64\IOMappingWebApi.csproj.CoreCompileInputs.cache
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi\obj\Release\netcoreapp1.1\win81-x64\IOMappingWebApi.AssemblyInfoInputs.cache
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi\obj\Release\netcoreapp1.1\win81-x64\IOMappingWebApi.AssemblyInfo.cs
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi\obj\Release\netcoreapp1.1\win81-x64\IOMappingWebApi.dll
+C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi\obj\Release\netcoreapp1.1\win81-x64\IOMappingWebApi.pdb
