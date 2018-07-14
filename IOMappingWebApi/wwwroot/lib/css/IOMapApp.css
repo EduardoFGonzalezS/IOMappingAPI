@@ -1,18 +1,6 @@
-﻿h3 {
-    font-size: 18 pt;
-    font-family: sans-serif;
-}
-table, td {
-    border: 2px solid black;
-    border-collapse: collapse;
-    padding: 5px;
-    font-family: sans-serif;
-}
-p {
-    font-family: sans-serif;
-    font-size: 10 pt;
-    color: darkgreen;
-    background-color: antiquewhite;
-    border: 1px solid black;
-    padding: 2px;
+﻿table tr td.info-readonly {
+    text-align: center;
+    background-color: #eee;
+    color: gray;
+    text-shadow: 0 1px 0 #fff;
 }

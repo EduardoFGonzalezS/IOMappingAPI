@@ -3,12 +3,20 @@
 <head>
     <meta name="viewport" content="width=device-width" />
 
+
+
     <link rel="stylesheet" href="~/lib/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" />
     <link rel="stylesheet" href="~/lib/css/themes/office/pqgrid.css" />
     <link rel="stylesheet" href="~/lib/css/pqgrid.min.css" />
-    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/themes/base/jquery-ui.css" />
-    @*<link rel="stylesheet" asp-href-include="~/lib/css/pqgrid.dev.css" />
-        <link rel="stylesheet" asp-href-include="~/lib/css/IOMapApp.css" />*@
+    <link rel="stylesheet" href="~/lib/css/IOMapApp.css" />
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+
 
     <title>LOOP Automation Info</title>
 </head>
@@ -16,7 +24,7 @@
 
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" >Mapping System</a>
+            <a class="navbar-brand">Mapping System</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -44,12 +52,12 @@
         @RenderBody()
     </div> <!-- /container -->
 
-
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
     <script type="text/javascript" src="~/lib/js/pqgrid.min.js"></script>
-    <script src="~/lib/js/bootstrap.bundle.min.js"></script>
-    @*<script type="text/javascript" src="~/lib/js/pqgrid.dev.js"></script>*@
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="maxcdn.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 
     @RenderSection("scripts", required: false)
 </body>
