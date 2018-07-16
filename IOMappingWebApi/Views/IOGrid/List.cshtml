@@ -1,12 +1,241 @@
 ﻿@model List<IOMappingWebApi.Model.InstanceContent>
-
-<a id="refresh" href="#">Hello</a>
+@*<a id="refresh" href="#">Hello</a>*@
 
 <div id="grid_editing" style="margin:25px;"></div>
 
 
 @section scripts
     {
+
+    @*Grid Initialization Mockup*@
+    <script>
+        $(function () {
+            var data = [
+                { InstanceName: 'TE490_1', AttributeName: 'PV', PLCName: 'MT09', PLCTagName: '400421', Rack: 1, Slot: 1, Point: 1, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "PLCName": "info-readonly", "PLCTagName": "info-readonly" } },
+                { InstanceName: 'TE490_2', AttributeName: 'PV', PLCName: 'MT09', PLCTagName: '400422', Rack: 1, Slot: 1, Point: 2, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "PLCName": "info-readonly", "PLCTagName": "info-readonly" } },
+                { InstanceName: 'TE490_3', AttributeName: 'PV', PLCName: 'MT09', PLCTagName: '400411', Rack: 1, Slot: 1, Point: 3, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "PLCName": "info-readonly", "PLCTagName": "info-readonly" } },
+                { InstanceName: 'TE490_4', AttributeName: 'PV', PLCName: 'MT09', PLCTagName: '400401', Rack: 1, Slot: 1, Point: 4, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "PLCName": "info-readonly", "PLCTagName": "info-readonly" } },
+                { InstanceName: 'TE490_5', AttributeName: 'PV', PLCName: 'MT09', PLCTagName: '400403', Rack: 1, Slot: 1, Point: 5, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "PLCName": "info-readonly", "PLCTagName": "info-readonly" } },
+                { InstanceName: 'TE490_6', AttributeName: 'PV', PLCName: 'MT09', PLCTagName: '400402', Rack: 1, Slot: 1, Point: 6, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "PLCName": "info-readonly", "PLCTagName": "info-readonly" } },
+                { InstanceName: 'TE490_7', AttributeName: 'PV', PLCName: 'MT09', PLCTagName: '400401', Rack: 1, Slot: 1, Point: 7, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "PLCName": "info-readonly", "PLCTagName": "info-readonly" } },
+                { InstanceName: 'TE490_8', AttributeName: 'PV', PLCName: 'MT09', PLCTagName: '400430', Rack: 1, Slot: 1, Point: 8, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "PLCName": "info-readonly", "PLCTagName": "info-readonly" } },
+                { InstanceName: 'TE490_9', AttributeName: 'PV', PLCName: 'MT09', PLCTagName: '400431', Rack: 1, Slot: 2, Point: 1, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "PLCName": "info-readonly", "PLCTagName": "info-readonly" } },
+                { InstanceName: 'TE490_10', AttributeName: 'PV', PLCName: 'MT09', PLCTagName: '400432', Rack: 1, Slot: 2, Point: 2, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "PLCName": "info-readonly", "PLCTagName": "info-readonly" } },
+                { InstanceName: 'TE490_11', AttributeName: 'PV', PLCName: 'MT09', PLCTagName: '400433', Rack: 1, Slot: 2, Point: 3, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "PLCName": "info-readonly", "PLCTagName": "info-readonly" } },
+                { InstanceName: 'TE490_12', AttributeName: 'PV', PLCName: 'MT09', PLCTagName: '400434', Rack: 1, Slot: 2, Point: 4, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "PLCName": "info-readonly", "PLCTagName": "info-readonly" } },
+                { InstanceName: 'TE490_13', AttributeName: 'PV', PLCName: 'MT09', PLCTagName: '400435', Rack: 1, Slot: 2, Point: 5, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "PLCName": "info-readonly", "PLCTagName": "info-readonly" } },
+                { InstanceName: 'TE490_14', AttributeName: 'PV', PLCName: 'MT09', PLCTagName: '400436', Rack: 1, Slot: 2, Point: 6, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "PLCName": "info-readonly", "PLCTagName": "info-readonly" } },
+                { InstanceName: 'TE490_15', AttributeName: 'PV', PLCName: 'MT09', PLCTagName: '400437', Rack: 1, Slot: 2, Point: 7, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "PLCName": "info-readonly", "PLCTagName": "info-readonly" } },
+                { InstanceName: 'TE490_16', AttributeName: 'PV', PLCName: 'MT09', PLCTagName: '400438', Rack: 1, Slot: 2, Point: 8, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "PLCName": "info-readonly", "PLCTagName": "info-readonly" } },
+
+                { InstanceName: 'UT483NW', AttributeName: 'PV', PLCName: 'MT09', PLCTagName: '400455', Rack: 2, Slot: 1, Point: 2, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "PLCName": "info-readonly", "PLCTagName": "info-readonly" } },
+                { InstanceName: 'UT483NE', AttributeName: 'PV', PLCName: 'MT09', PLCTagName: '400456', Rack: 2, Slot: 1, Point: 3, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "PLCName": "info-readonly", "PLCTagName": "info-readonly" } },
+                { InstanceName: 'UT483SE', AttributeName: 'PV', PLCName: 'MT09', PLCTagName: '400457', Rack: 2, Slot: 1, Point: 4, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "PLCName": "info-readonly", "PLCTagName": "info-readonly" } },
+                { InstanceName: 'UT483SW', AttributeName: 'PV', PLCName: 'MT09', PLCTagName: '400458', Rack: 2, Slot: 1, Point: 5, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "PLCName": "info-readonly", "PLCTagName": "info-readonly" } },
+
+                { InstanceName: 'AT294NW', AttributeName: 'PV', PLCName: 'MT09', PLCTagName: '400443', Rack: 3, Slot: 1, Point: 2, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "PLCName": "info-readonly", "PLCTagName": "info-readonly" } },
+                { InstanceName: 'AT294SW', AttributeName: 'PV', PLCName: 'MT09', PLCTagName: '400444', Rack: 3, Slot: 1, Point: 3, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "PLCName": "info-readonly", "PLCTagName": "info-readonly" } },
+                { InstanceName: 'AT294SE', AttributeName: 'PV', PLCName: 'MT09', PLCTagName: '400445', Rack: 3, Slot: 1, Point: 4, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "PLCName": "info-readonly", "PLCTagName": "info-readonly" } },
+                { InstanceName: 'AT294NE', AttributeName: 'PV', PLCName: 'MT09', PLCTagName: '400446', Rack: 3, Slot: 1, Point: 5, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "PLCName": "info-readonly", "PLCTagName": "info-readonly" } },
+            ];
+
+            //called when save changes button is clicked.
+            function saveChanges() {
+                var grid = $grid.pqGrid('getInstance').grid;
+
+                //debugger;
+                //attempt to save editing cell.
+                if (grid.saveEditCell() === false) {
+                    return false;
+                }
+
+                var datat = $("#grid_editing").pqGrid("getData", { dataIndx: ['InstanceName', 'AttributeName', 'PLCTagName'] });
+                alert(JSON.stringify(datat));
+
+
+                var isDirty = grid.isDirty();
+                if (isDirty) {
+                    //validate the new added rows.
+                    var addList = grid.getChanges().addList;
+                    //debugger;
+                    for (var i = 0; i < addList.length; i++) {
+                        var rowData = addList[i];
+                        var isValid = grid.isValid({ "rowData": rowData }).valid;
+                        if (!isValid) {
+                            return;
+                        }
+                    }
+                    var changes = grid.getChanges({ format: "byVal" });
+
+                    //post changes to server
+                    $.ajax({
+                        dataType: "json",
+                        type: "POST",
+                        async: true,
+                        beforeSend: function (jqXHR, settings) {
+                            grid.showLoading();
+                        },
+                        url: "/pro/products/batch", //for ASP.NET, java
+                        data: { list: JSON.stringify(changes) },
+                        success: function (changes) {
+                            //debugger;
+                            grid.commit({ type: 'add', rows: changes.addList });
+                            grid.commit({ type: 'update', rows: changes.updateList });
+                            grid.commit({ type: 'delete', rows: changes.deleteList });
+
+                            grid.history({ method: 'reset' });
+                        },
+                        complete: function () {
+                            grid.hideLoading();
+                        }
+                    });
+                }
+            }
+            var obj = {
+                hwrap: false,
+                resizable: true,
+                rowBorders: true,
+                virtualX: true,
+                filterModel: { header: true, type: 'local' },
+                trackModel: { on: true }, //to turn on the track changes.
+                toolbar: {
+                    items: [
+                        {
+                            type: 'button', icon: 'ui-icon-plus', label: 'Add Line', listener:
+                                {
+                                    "click": function (evt, ui) {
+                                        //append empty row at the end.
+                                        var rowData = { ProductID: 34, UnitPrice: 0.2 }; //empty row
+                                        var rowIndx = $grid.pqGrid("addRow", { rowData: rowData, checkEditable: true });
+                                        $grid.pqGrid("goToPage", { rowIndx: rowIndx });
+                                        $grid.pqGrid("editFirstCellInRow", { rowIndx: rowIndx });
+                                    }
+                                }
+                        },
+                        { type: 'separator' },
+                        {
+                            type: 'button', icon: 'ui-icon-disk', label: 'Save Changes', cls: 'changes', listener:
+                                {
+                                    "click": function (evt, ui) {
+                                        saveChanges();
+                                    }
+                                },
+                            options: { disabled: true }
+                        },
+                        {
+                            type: 'button', icon: 'ui-icon-cancel', label: 'Reject Changes', cls: 'changes', listener:
+                                {
+                                    "click": function (evt, ui) {
+                                        $grid.pqGrid("rollback");
+                                        $grid.pqGrid("history", { method: 'resetUndo' });
+                                    }
+                                },
+                            options: { disabled: true }
+                        },
+                        { type: 'separator' },
+                        {
+                            type: 'button', icon: 'ui-icon-arrowreturn-1-s', label: 'Undo', cls: 'changes', listener:
+                                {
+                                    "click": function (evt, ui) {
+                                        $grid.pqGrid("history", { method: 'undo' });
+                                    }
+                                },
+                            options: { disabled: true }
+                        },
+                        {
+                            type: 'button', icon: 'ui-icon-arrowrefresh-1-s', label: 'Redo', listener:
+                                {
+                                    "click": function (evt, ui) {
+                                        $grid.pqGrid("history", { method: 'redo' });
+                                    }
+                                },
+                            options: { disabled: true }
+                        }
+                    ]
+                },
+                scrollModel: {
+                    autoFit: true
+                },
+                swipeModel: { on: false },
+                editModel: {
+                    saveKey: $.ui.keyCode.ENTER
+                },
+                editor: {
+                    select: true
+                },
+                title: "<b>IO List</b>",
+                history: function (evt, ui) {
+                    var $grid = $(this);
+                    if (ui.canUndo != null) {
+                        $("button.changes", $grid).button("option", { disabled: !ui.canUndo });
+                    }
+                    if (ui.canRedo != null) {
+                        $("button:contains('Redo')", $grid).button("option", "disabled", !ui.canRedo);
+                    }
+                    $("button:contains('Undo')", $grid).button("option", { label: 'Undo (' + ui.num_undo + ')' });
+                    $("button:contains('Redo')", $grid).button("option", { label: 'Redo (' + ui.num_redo + ')' });
+                },
+                colModel: [
+                    {
+                        title: "WW Object", dataType: "string", align: "center", dataIndx: "InstanceName", editable: false, width: 120,
+                        filter: { type: 'textbox', condition: 'begin', listeners: ['keyup'] }
+                    },
+                    {
+                        title: "WW Attribute", dataType: "string", align: "center", dataIndx: "AttributeName", editable: false, width: 120
+                    },
+                    {
+                        title: "PLC", dataType: "string", dataIndx: "PLCName", align: "center", editable: false, width: 80
+                    },
+                    {
+                        title: "PLC TAG", width: 165, dataType: "string", align: "center", editable: false, dataIndx: "PLCTagName",
+                        //filter: { type: 'textbox', condition: 'begin', listeners: ['keyup'] },
+                        //validations: [
+                        //    { type: 'minLen', value: 1, msg: "Required" },
+                        //    { type: 'maxLen', value: 40, msg: "length should be <= 40" }
+                        //]
+                    },
+                    {
+                        title: "RACK", width: 50, dataType: "string", align: "center", dataIndx: "Rack",
+                    },
+                    {
+                        title: "SLOT", width: 50, dataType: "string", align: "center", dataIndx: "Slot",
+                    },
+                    {
+                        title: "POINT", width: 50, dataType: "string", align: "center", dataIndx: "Point",
+                    }
+                ],
+                pageModel: { type: "local", rPP: 20 },
+                dataModel: { data: data },
+                change: function (evt, ui) {
+                    //refresh the filter.
+                    if (ui.source != "add") {
+                        $grid.pqGrid("filter", { oper: 'add', data: [] });
+                    }
+                },
+                refresh: function () {
+                    $("#grid_editing").find("button.delete_btn").button({ icons: { primary: 'ui-icon-scissors' } })
+                        .unbind("click")
+                        .bind("click", function (evt) {
+                            var $tr = $(this).closest("tr");
+                            var obj = $grid.pqGrid("getRowIndx", { $tr: $tr });
+                            var rowIndx = obj.rowIndx;
+                            $grid.pqGrid("addClass", { rowIndx: rowIndx, cls: 'pq-row-delete' });
+
+                            var ans = window.confirm("Are you sure to delete row No " + (rowIndx + 1) + "?");
+                            $grid.pqGrid("removeClass", { rowIndx: rowIndx, cls: 'pq-row-delete' });
+                            if (ans) {
+                                $grid.pqGrid("deleteRow", { rowIndx: rowIndx });
+                            }
+                        });
+                }
+            };
+
+            var $grid = $("#grid_editing").pqGrid(obj);
+            //var $pqScrollbar = $grid.find(".pq-sb-horiz");
+            //$("#grid_editing").pqScrollBar("option", "bootstrap", { on: false });
+            //$("#grid_editing").pqScrollBar({ on: false, slider: 'btn btn-default', up: "glyphicon glyphicon-chevron-up", down: "glyphicon glyphicon-chevron-down", left: "glyphicon glyphicon-chevron-left", right: "glyphicon glyphicon-chevron-right"  });
+        });
+    </script>
     @*Grid Initialization*@
     <script>
         $(function () {
@@ -45,7 +274,7 @@
                         }
                     }
                     var changes = grid.getChanges({ format: "byVal" });
-                    
+
                     //post changes to server
                     $.ajax({
                         dataType: "json",
@@ -209,7 +438,7 @@
                 }
             };
 
-            var $grid = $("#grid_editing").pqGrid(obj);
+            var $grid = $("#grid_editing2").pqGrid(obj);
         });
     </script>
 
@@ -231,4 +460,32 @@
             });
         });
     </script>
+
+
+    <script>
+        //debugger;
+        $.fn.bootstrapBtn = $.fn.button.noConflict();
+        $.fn.bootstrapTooltip = $.fn.tooltip.noConflict();
+        //$.paramquery.pqGrid.prototype.options.bootstrap.on = true;
+        //$.paramquery.pqSelect.prototype.options.bootstrap.on = true;
+        if ($.paramquery && $.paramquery.pqGrid) {
+            var options = $.paramquery.pqGrid.prototype.options;
+            var css = $.paramquery.pqGrid.prototype.options.collapsible.css;
+            //css.zIndex = 20000;
+            css.marginTop = "51px";
+            //css.marginLeft = "250px";
+            options.toggle = function (evt, ui) {
+                //debugger;
+                if (ui.state == "max") {
+                    if (this.nodeName) {
+                        $(this).pqGrid("option", "height", "100%-51");
+                    }
+                    else {
+                        this.option("height", "100%-51");
+                    }
+                }
+            }
+        }
+    </script>
+
 }
