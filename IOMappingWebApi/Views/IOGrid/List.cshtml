@@ -2,7 +2,7 @@
 
 <a id="refresh" href="#">Hello</a>
 
-<div id="grid_array" style="margin:25px;"></div>
+<div id="grid_editing" style="margin:25px;"></div>
 
 
 @section scripts
@@ -28,6 +28,10 @@
                     return false;
                 }
 
+                var datat = $("#grid_editing").pqGrid("getData", { dataIndx: ['InstanceName', 'AttributeName', 'PLCTagName'] });
+                alert(JSON.stringify(datat));
+
+
                 var isDirty = grid.isDirty();
                 if (isDirty) {
                     //validate the new added rows.
@@ -41,7 +45,7 @@
                         }
                     }
                     var changes = grid.getChanges({ format: "byVal" });
-
+                    
                     //post changes to server
                     $.ajax({
                         dataType: "json",
@@ -205,7 +209,7 @@
                 }
             };
 
-            var $grid = $("#grid_array").pqGrid(obj);
+            var $grid = $("#grid_editing").pqGrid(obj);
         });
     </script>
 
@@ -221,8 +225,8 @@
                     for (var i = 0; i < arrayLength; i++) {
                         ajxdat[i] = { 'InstanceName': '33', 'AttributeName': 'Attribute_Val2', 'IOTagName': 'IOTagName_Val', 'PLCTagName': result.List[i].PLCTag.Name, 'Rack': 1, 'Slot': 4, 'Point': 3, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "IOTagName": "info-readonly"}  };
                     }
-                    $("#grid_array").pqGrid("option", "dataModel", { data: ajxdat });
-                    $("#grid_array").pqGrid('refreshDataAndView');
+                    $("#grid_editing").pqGrid("option", "dataModel", { data: ajxdat });
+                    $("#grid_editing").pqGrid('refreshDataAndView');
                 }
             });
         });
