@@ -18,6 +18,7 @@ namespace IOMappingWebApi.Model
         IPLCTag_Repository PLCTags { get; }
         IInstance_Repository Instances { get; }
         IContent_Repository Contents { get; }
+        IPLC_Repository PLCs { get; }
         void PushRecordsToDbset(List<InstanceContent> Contents_ToPush);
     }
 
@@ -36,7 +37,7 @@ namespace IOMappingWebApi.Model
         public IPLCTag_Repository PLCTags { get; private set; }
         public IInstance_Repository Instances { get; private set; }
         public IContent_Repository Contents { get; private set; }
-
+        public IPLC_Repository PLCs { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the UnitOfWork class.
@@ -51,6 +52,7 @@ namespace IOMappingWebApi.Model
             IOTags = new IOTag_Repository(context);
             Contents = new Content_Repository(context);
             Instances = new Instance_Repository(context);
+            PLCs = new PLC_Repository(context);
         }
 
         public void PushRecordsToDbset(List<InstanceContent> Passed_Contents)

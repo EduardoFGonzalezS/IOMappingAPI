@@ -36,7 +36,9 @@ namespace IOMappingWebApi.Model
                 .Include(c => c.Instance)
                 .Include(c => c.Attribute)
                 .Include(c => c.IOTag)
-                .Include(c => c.PLCTag).ToList();
+                .Include(c => c.IOTag.PLC)
+                .Include(c => c.PLCTag)
+                .Include(c => c.PLCTag.PLC).ToList();
              return IContents;
             }
 

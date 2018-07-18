@@ -23,10 +23,16 @@ namespace IOMappingWebApi.Model
         public int Slot { get; set; }
         [XmlElement("Point")]
         public int Point { get; set; }
+        [XmlElement("PLCID")]
+        public int PLCID { get; set; }
 
-        //Navigation Property
+        //Navigation Property (So that it can be pointed from the InstanceContent Object)
         [JsonIgnore]
         [XmlIgnore()]
         public ICollection<InstanceContent> InstanceContent { get; set; }
+
+        //Navigation Property (So that it can point to PLC Object)
+        [XmlElement("PLC")]
+        public PLC PLC { get; set; }
     }
 }

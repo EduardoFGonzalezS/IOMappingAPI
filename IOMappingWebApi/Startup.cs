@@ -59,6 +59,7 @@ namespace IOMappingWebApi
             services.AddScoped<IInstance_Repository, Instance_Repository>();
             services.AddScoped<IIOTag_Repository, IOTag_Repository>();
             services.AddScoped<IPLCTag_Repository, PLCTag_Repository>();
+            services.AddScoped<IPLC_Repository, PLC_Repository>();
             services.AddScoped<IGalaxyObject_UoW, GalaxyObject_UoW>();
         }
 

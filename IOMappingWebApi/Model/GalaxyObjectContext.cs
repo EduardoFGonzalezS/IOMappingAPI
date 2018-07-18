@@ -21,6 +21,7 @@ namespace IOMappingWebApi.Model
         public DbSet<IOTag> IOTag { get; set; }
         public DbSet<PLCTag> PLCTag { get; set; }
         public DbSet<Instance> Instance { get; set; }
+        public DbSet<PLC> PLC { get; set; }
     }
 
 

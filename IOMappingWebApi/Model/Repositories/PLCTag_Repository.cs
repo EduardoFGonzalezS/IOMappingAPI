@@ -12,5 +12,20 @@ namespace IOMappingWebApi.Model
     public class PLCTag_Repository : RecordRepository<PLCTag>, IPLCTag_Repository
     {
         public PLCTag_Repository(GalaxyObjectContext ctx) : base(ctx) { }
+
+        public override List<PLCTag> EntityCollection
+        {
+            get
+            {
+                var PLCTags = context.PLCTag
+                    .Include(pt => pt.PLC).ToList();
+                return PLCTags;
+            }
+            set
+            {
+                // Not Implemente for the time being
+            }
+        }
     }
+
 }

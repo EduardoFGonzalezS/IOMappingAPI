@@ -17,7 +17,7 @@ namespace IOMappingWebApi.Model
     public abstract class RecordRepository<TEntity> where TEntity : class, ISimpleRecord, new()
     {
         // #01 - Fields
-        private GalaxyObjectContext context;
+        protected GalaxyObjectContext context;
 
         // #02 - Constructors
         public RecordRepository(GalaxyObjectContext ctx)
@@ -26,7 +26,7 @@ namespace IOMappingWebApi.Model
         }
 
         // #03 - Properties
-        public List<TEntity> EntityCollection
+        public virtual List<TEntity> EntityCollection
         {
             get
             {
