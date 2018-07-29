@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net;
+using System.Diagnostics;
 
 namespace IOMappingWebApi.Model
 {
@@ -11,7 +15,7 @@ namespace IOMappingWebApi.Model
         /// Saves all pending changes
         /// </summary>
         /// <returns>The number of objects in an Added, Modified, or Deleted state</returns>
-        int Commit();
+        Task Commit();
 
         IAttribute_Repository Attributes { get; }
         IIOTag_Repository IOTags { get; }
@@ -19,7 +23,7 @@ namespace IOMappingWebApi.Model
         IInstance_Repository Instances { get; }
         IContent_Repository Contents { get; }
         IPLC_Repository PLCs { get; }
-        void PushRecordsToDbset(List<InstanceContent> Contents_ToPush);
+        Task<HttpResponseMessage> PushRecordsToDbset(List<InstanceContent> Contents_ToPush);
     }
 
     /// <summary>
@@ -47,7 +51,6 @@ namespace IOMappingWebApi.Model
         {
             context = ctx;
             Attributes = new Attribute_Repository(context);
-            IOTags = new IOTag_Repository(context);
             PLCTags = new PLCTag_Repository(context);
             IOTags = new IOTag_Repository(context);
             Contents = new Content_Repository(context);
@@ -55,54 +58,129 @@ namespace IOMappingWebApi.Model
             PLCs = new PLC_Repository(context);
         }
 
-        public void PushRecordsToDbset(List<InstanceContent> Passed_Contents)
+        public async Task<HttpResponseMessage> PushRecordsToDbset(List<InstanceContent> _Contents)
         {
-            List<Attribute> Attributes_ToPush = Passed_Contents.Select(c => c.Attribute).ToList();
-            List<Instance> Instances_ToPush = Passed_Contents.Select(c => c.Instance).ToList();
-            List<IOTag> IOTags_ToPush = Passed_Contents.Select(c => c.IOTag).ToList();
-            List<PLCTag> PLCTags_ToPush = Passed_Contents.Select(c => c.PLCTag).ToList();
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.BadRequest);
+            response.ReasonPhrase = "Request did not initialize";
+
+
+            List<PLC> PLCs1 = _Contents.Select(c => c.IOTag.PLC).ToList();
+            List<PLC> PLCs2 = _Contents.Select(c => c.PLCTag.PLC).ToList();
+            List<PLC> PLCs_ToPush = PLCs1.Union(PLCs2).ToList();
+            PLCs.PushToDbset(PLCs_ToPush);
+
+            context.SaveChanges();
+
+            List<Attribute> Attributes_ToPush = _Contents.Select(c => c.Attribute).ToList();
+            List<Instance> Instances_ToPush = _Contents.Select(c => c.Instance).ToList();
+            List<IOTag> IOTags_FromContents = _Contents.Select(c => c.IOTag).ToList();
+            List<IOTag> IOTags_ToPush = IOTag_UpdatedPLCIDs(IOTags_FromContents);
+
+            List<PLCTag> PLCTags_FromContents = _Contents.Select(c => c.PLCTag).ToList();
+            List<PLCTag> PLCTags_ToPush = PLCTags_FromContents;// PLCTag_UpdatedPLCIDs(PLCTags_FromContents);
 
             Attributes.PushToDbset(Attributes_ToPush);
             Instances.PushToDbset(Instances_ToPush);
             IOTags.PushToDbset(IOTags_ToPush);
             PLCTags.PushToDbset(PLCTags_ToPush);
 
-            List<InstanceContent> PContents = Passed_Contents;
-            int FoundId = 0;
-            Commit();
+            context.SaveChanges();
 
-            foreach (InstanceContent ic in PContents)
-            {
-                FoundId = Attributes.GetID(ic.Attribute.Name);
-                ic.AttributeID = FoundId; ic.Attribute.ID = FoundId;
-
-                FoundId = Instances.GetID(ic.Instance.Name);
-                ic.InstanceID = FoundId; ic.Instance.ID = FoundId;
-
-                FoundId = IOTags.GetID(ic.IOTag.Name);
-                ic.IOTagID = FoundId; ic.IOTag.ID = FoundId;
-
-                FoundId = PLCTags.GetID(ic.PLCTag.Name);
-                ic.PLCTagID = FoundId; ic.PLCTag.ID = FoundId;
-            }
+            List<InstanceContent> PContents = FetchIds(_Contents);
 
             Contents.PushToDbset(PContents);
-            Commit();
+            //context.SaveChanges();
 
-            List<InstanceContent> Surplus = Contents.SurplusInDatabase(PContents);
-            Contents.DeleteList(Surplus);
+            //List<InstanceContent> Surplus = Contents.SurplusInDatabase(PContents);
+            //Contents.DeleteList(Surplus);
 
-            Commit();
+            //context.SaveChanges();
+
+            Debug.WriteLine(6666666666); //--------------------------------------------
+            response = new HttpResponseMessage(HttpStatusCode.OK);
+            return response;
+        }
+
+        private List<InstanceContent> FetchIds(List<InstanceContent> _ContentList)
+        {
+            List<InstanceContent> ReturnList = new List<InstanceContent>();
+            int f_InstanceID; int f_AttributeID; int f_IOTagID; int f_PLCTagID; int f_ContentID;
+
+            foreach (InstanceContent ic in _ContentList)
+            {
+                f_InstanceID = Instances.GetID(ic.Instance.Name);
+                f_AttributeID = Attributes.GetID(ic.Attribute.Name);
+                f_IOTagID = IOTags.GetID(ic.IOTag.Name);
+                f_PLCTagID = PLCTags.GetID(ic.PLCTag.Name);
+                f_ContentID = Contents.GetID(ic.Instance.Name, ic.Attribute.Name);
+
+                ReturnList.Add(
+                    new InstanceContent
+                    {
+                        InstanceContentID = f_ContentID,
+                        InstanceID = f_InstanceID,
+                        Instance = new Instance { Name = ic.Instance.Name, ID = f_InstanceID },
+                        AttributeID = f_AttributeID,
+                        Attribute = new Attribute { Name = ic.Attribute.Name, ID = f_AttributeID },
+                        IOTagID = f_IOTagID,
+                        IOTag = new IOTag { Name = ic.IOTag.Name, ID = f_IOTagID },
+                        PLCTagID = f_PLCTagID,
+                        PLCTag = new PLCTag { Name = ic.PLCTag.Name, ID = f_PLCTagID }
+                    });
+            }
+            return ReturnList;
+        }
+
+        public List<PLCTag> PLCTag_UpdatedPLCIDs(List<PLCTag> _Entities)
+        {
+            List<PLCTag> UpdatedList = (from ents in _Entities
+                                       join db in PLCTags.EntityCollection on ents.Name equals db.Name
+                                       into JoinedTbl
+                                       from db in JoinedTbl.DefaultIfEmpty(new PLCTag())
+                                       select new PLCTag
+                                       {
+                                           Name = ents.Name,
+                                           ID = ents.ID,
+                                           PLCID = db != null ? db.PLC.ID : 0,
+                                           PLC = new PLC { Name = ents.PLC.Name, ID = db != null ? db.PLC.ID : 0 },
+                                           Rack = ents.Rack,
+                                           Slot = ents.Slot,
+                                           Point = ents.Point
+                                       }
+                               ).ToList();
+
+            return UpdatedList;
+        }
+
+        public List<IOTag> IOTag_UpdatedPLCIDs(List<IOTag> _Entities)
+        { 
+            List<IOTag> UpdatedList = (from ents in _Entities
+                               join db in IOTags.EntityCollection on ents.Name equals db.Name
+                               into JoinedTbl
+                               from db in JoinedTbl.DefaultIfEmpty(new IOTag())
+                               select new IOTag
+                               {
+                                   Name = ents.Name,
+                                   ID = ents.ID,
+                                   PLCID = db != null ? db.PLC.ID : 0 ,
+                                   PLC = new PLC{Name = ents.PLC.Name, ID = db != null ? db.PLC.ID : 0 }
+                               }
+                               ).ToList();
+
+            return UpdatedList;
         }
 
         /// <summary>
         /// Saves all pending changes
         /// </summary>
         /// <returns>The number of objects in an Added, Modified, or Deleted state</returns>
-        public int Commit()
+        /// 
+        public async Task Commit()
         {
-            // Save changes with the default options
-            return context.SaveChanges();
+            using (var ctx = context)
+            {
+                await ctx.SaveChangesAsync();
+            }
         }
 
         /// <summary>

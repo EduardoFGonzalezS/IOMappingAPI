@@ -26,6 +26,19 @@ namespace IOMappingWebApi.Model
                 // Not Implemente for the time being
             }
         }
+
+        public override void Update(int id, PLCTag Entity)
+        {
+            using (context)
+            {
+                var FoundEntity = context.Set<PLCTag>().Find(id);
+                //context.Entry(FoundEntity).CurrentValues.SetValues(Entity);
+                context.Entry(FoundEntity).Property("Name").CurrentValue = Entity.Name;
+                context.Entry(FoundEntity).Property("Rack").CurrentValue = Entity.Rack;
+                context.Entry(FoundEntity).Property("Slot").CurrentValue = Entity.Slot;
+                context.Entry(FoundEntity).Property("Point").CurrentValue = Entity.Point;
+            }
+        }
     }
 
 }

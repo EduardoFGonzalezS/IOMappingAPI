@@ -25,5 +25,8 @@ namespace IOMappingWebApi.Model
         [JsonIgnore]
         [XmlIgnore()]
         public ICollection<IOTag> IOTag { get; set; }
+
+        public PLC(string _Name) { Name = _Name; }
+        public PLC() { }
     }
 }

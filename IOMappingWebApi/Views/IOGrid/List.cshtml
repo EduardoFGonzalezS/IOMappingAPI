@@ -7,6 +7,304 @@
 @section scripts
     {
 
+
+@*Grid Initialization*@
+<script>
+        $(function () {
+            var data = [];
+            @{ int indx = 0;}
+
+            var Postdata = [];
+
+            @foreach (var CL in Model)
+            {
+                @:data[@indx] = { 'InstanceName': '@CL.Instance.Name', 'AttributeName': '@CL.Attribute.Name', 'WWPLC': '@CL.IOTag.PLC.Name', 'WWPLCTag': '@CL.IOTag.Name', 'PLC': '@CL.PLCTag.PLC.Name', 'PLCTag': '@CL.PLCTag.Name', 'Rack': @CL.PLCTag.Rack, 'Slot': @CL.PLCTag.Slot, 'Point': @CL.PLCTag.Point, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "WWPLC": "info-readonly", "WWPLCTag": "info-readonly"}  };
+                indx++;
+            }
+            //called when save changes button is clicked.
+            function saveChanges() {
+                var grid = $grid.pqGrid('getInstance').grid;
+
+                var datat = $("#grid_editing").pqGrid("getData", { dataIndx: ['InstanceName', 'AttributeName', 'WWPLC', 'WWPLCTag', 'PLC', 'PLCTag', 'Rack', 'Slot','Point'] });
+                var arrayLength = datat.length;
+                Postdata = [];
+
+                for (var i = 0; i < arrayLength; i++) {
+                    Postdata[i] = {
+                        Instance: {
+                            Name: datat[i].InstanceName,
+                            ID: 0
+                        },
+                        Attribute: {
+                            Name: datat[i].AttributeName,
+                            ID: 0
+                        },
+                        IOTag: {
+                            Name: datat[i].WWPLCTag,
+                            ID: 0,
+                            PLC:
+                                {
+                                    Name: datat[i].WWPLC,
+                                    ID: 0
+                                }
+                        },
+                        PLCTag: {
+                            Name: datat[i].PLCTag,
+                            ID: 0,
+                            Rack: datat[i].Rack,
+                            Slot: datat[i].Slot,
+                            Point: datat[i].Point,
+                            PLC:
+                                {
+                                    Name: datat[i].PLC,
+                                    ID: 0
+                                }
+                        }
+                    };
+                }
+
+                //debugger;
+                //attempt to save editing cell.
+                if (grid.saveEditCell() === false) {
+                    return false;
+                }
+
+                var isDirty = grid.isDirty();
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    async: true,
+                    beforeSend: function (jqXHR, settings) {
+                        grid.showLoading();
+                    },
+                    url: '@Url.Action("Post", "IOGrid", new {}, "http")', //for ASP.NET, java
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(Postdata),
+                    success: function () {
+                        //debugger;
+                        grid.history({ method: 'reset' });
+                    },
+                    complete: function () {
+                        grid.hideLoading();
+                    }
+
+                });
+
+                //if (isDirty) {
+                //    alert(JSON.stringify(Postdata));
+                //    //validate the new added rows.
+                //    var addList = grid.getChanges().addList;
+                    
+                //    //debugger;
+                //    for (var i = 0; i < addList.length; i++) {
+                //        var rowData = addList[i];
+                //        var isValid = grid.isValid({ "rowData": rowData }).valid;
+                //        if (!isValid) {
+                //            return;
+                //        }
+                //    }
+                //    var changes = grid.getChanges({ format: "byVal" });
+
+                //    //post changes to server
+                //    $.ajax({
+                //        dataType: "json",
+                //        type: "POST",
+                //        async: true,
+                //        beforeSend: function (jqXHR, settings) {
+                //            grid.showLoading();
+                //        },
+                //        url: "/IOGrid/Post", //for ASP.NET, java  -- var used to be changes   Url.Action("Post", "IOGrid", new { }, "http")   "/IOGrid/Post"
+                //        data: { list: JSON.stringify(Postdata) },
+                //        success: function (changes) {
+                //            //debugger;
+                //            grid.commit({ type: 'add', rows: changes.addList });
+                //            grid.commit({ type: 'update', rows: changes.updateList });
+                //            grid.commit({ type: 'delete', rows: changes.deleteList });
+                //            grid.history({ method: 'reset' });
+                //        },
+                //        complete: function () {
+                //            grid.hideLoading();
+                //        }
+
+                //    });
+                //}
+            }
+
+                var obj = {
+                hwrap: false,
+                resizable: true,
+                rowBorders: true,
+                virtualX: true,
+                filterModel: { header: true, type: 'local' },
+                trackModel: { on: true }, //to turn on the track changes.
+                toolbar: {
+                    items: [
+                        {
+                            type: 'button', icon: 'ui-icon-plus', label: 'Add Line', listener:
+                                {
+                                    "click": function (evt, ui) {
+                                        //append empty row at the end.
+                                        var rowData = { ProductID: 34, UnitPrice: 0.2 }; //empty row
+                    var rowIndx = $grid.pqGrid("addRow", { rowData: rowData, checkEditable: true });
+                                        $grid.pqGrid("goToPage", { rowIndx: rowIndx });
+                                        $grid.pqGrid("editFirstCellInRow", { rowIndx: rowIndx });
+                                    }
+                                }
+                        },
+                        { type: 'separator' },
+                        {
+                            type: 'button', icon: 'ui-icon-disk', label: 'Save Changes', cls: 'changes', listener:
+                                {
+                                    "click": function (evt, ui) {
+                        saveChanges();
+                    }
+                                },
+                            options: { disabled: true }
+                        },
+                        {
+                            type: 'button', icon: 'ui-icon-cancel', label: 'Reject Changes', cls: 'changes', listener:
+                                {
+                                    "click": function (evt, ui) {
+                                        $grid.pqGrid("rollback");
+                                        $grid.pqGrid("history", { method: 'resetUndo' });
+                    }
+                                },
+                            options: { disabled: true }
+                        },
+                        { type: 'separator' },
+                        {
+                            type: 'button', icon: 'ui-icon-arrowreturn-1-s', label: 'Undo', cls: 'changes', listener:
+                                {
+                                    "click": function (evt, ui) {
+                                        $grid.pqGrid("history", { method: 'undo' });
+                    }
+                                },
+                            options: { disabled: true }
+                        },
+                        {
+                            type: 'button', icon: 'ui-icon-arrowrefresh-1-s', label: 'Redo', listener:
+                                {
+                                    "click": function (evt, ui) {
+                                        $grid.pqGrid("history", { method: 'redo' });
+                    }
+                                },
+                            options: { disabled: true }
+                        }
+                    ]
+                },
+                scrollModel: {
+                    autoFit: true
+                },
+                swipeModel: { on: false },
+                editModel: {
+                    saveKey: $.ui.keyCode.ENTER
+                },
+                editor: {
+                    select: true
+                },
+                title: "<b>IO List</b>",
+                history: function (evt, ui) {
+                        var $grid = $(this);
+                        if (ui.canUndo != null) {
+                        $("button.changes", $grid).button("option", { disabled: !ui.canUndo });
+                        }
+                        if (ui.canRedo != null) {
+                        $("button:contains('Redo')", $grid).button("option", "disabled", !ui.canRedo);
+                        }
+                    $("button:contains('Undo')", $grid).button("option", { label: 'Undo (' + ui.num_undo + ')' });
+                    $("button:contains('Redo')", $grid).button("option", { label: 'Redo (' + ui.num_redo + ')' });
+                    },
+                colModel: [
+                    {
+                        title: "INSTANCE", dataType: "string", align: "center", dataIndx: "InstanceName", editable: false, width: 120,
+                        filter: { type: 'textbox', condition: 'begin', listeners: ['keyup'] }
+                    },
+                    {
+                        title: "ATTRIBUTE", dataType: "string", align: "center", dataIndx: "AttributeName", editable: false, width: 120
+                    },
+                    {
+                        title: "WW PLC", dataType: "string", dataIndx: "WWPLC", align: "center", editable: false, width: 80
+                    },
+                    {
+                        title: "WW PLC Tag", dataType: "string", dataIndx: "WWPLCTag", align: "center", editable: false, width: 80
+                    },
+                    {
+                        title: "PLC", width: 165, dataType: "string", align: "center", dataIndx: "PLC", width: 80,
+                        //filter: { type: 'textbox', condition: 'begin', listeners: ['keyup'] },
+                        validations: [
+                            { type: 'minLen', value: 1, msg: "Required" },
+                            { type: 'maxLen', value: 40, msg: "length should be <= 40" }
+                        ]
+                    },
+                    {
+                        title: "PLC Tag", width: 165, dataType: "string", align: "center", dataIndx: "PLCTag", width: 80,
+                        //filter: { type: 'textbox', condition: 'begin', listeners: ['keyup'] },
+                        validations: [
+                            { type: 'minLen', value: 1, msg: "Required" },
+                            { type: 'maxLen', value: 40, msg: "length should be <= 40" }
+                        ]
+                    },
+                    {
+                        title: "RACK", width: 50, dataType: "string", align: "center", dataIndx: "Rack",
+                    },
+                    {
+                        title: "SLOT", width: 50, dataType: "string", align: "center", dataIndx: "Slot",
+                    },
+                    {
+                        title: "POINT", width: 50, dataType: "string", align: "center", dataIndx: "Point",
+                    }
+                ],
+                pageModel: { type: "local", rPP: 20 },
+                dataModel: { data: data },
+                change: function (evt, ui) {
+                        //refresh the filter.
+                        if (ui.source != "add") {
+                        $grid.pqGrid("filter", { oper: 'add', data: [] });
+                        }
+                    },
+                refresh: function () {
+                    $("#grid_editing").find("button.delete_btn").button({ icons: { primary: 'ui-icon-scissors' } })
+                        .unbind("click")
+                        .bind("click", function (evt) {
+                            var $tr = $(this).closest("tr");
+                            var obj = $grid.pqGrid("getRowIndx", { $tr: $tr });
+                            var rowIndx = obj.rowIndx;
+                            $grid.pqGrid("addClass", { rowIndx: rowIndx, cls: 'pq-row-delete' });
+
+                            var ans = window.confirm("Are you sure to delete row No " + (rowIndx + 1) + "?");
+                            $grid.pqGrid("removeClass", { rowIndx: rowIndx, cls: 'pq-row-delete' });
+                            if (ans) {
+                                $grid.pqGrid("deleteRow", { rowIndx: rowIndx });
+                            }
+                        });
+                    }
+            };
+
+            var $grid = $("#grid_editing").pqGrid(obj);
+        });
+</script>
+
+@*Grid Refresh Button*@
+<script>
+        $('#refresh').on('click', function () {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("Get", "Object", new {  }, "http")',
+                success: function (result) {
+                    var ajxdat = [];
+                    var arrayLength = result.List.length;
+                    for (var i = 0; i < arrayLength; i++) {
+                        ajxdat[i] = { 'InstanceName': '33', 'AttributeName': 'Attribute_Val2', 'IOTagName': 'IOTagName_Val', 'PLCTagName': result.List[i].PLCTag.Name, 'Rack': 1, 'Slot': 4, 'Point': 3, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "IOTagName": "info-readonly"}  };
+                    }
+                    $("#grid_editing").pqGrid("option", "dataModel", { data: ajxdat });
+                    $("#grid_editing").pqGrid('refreshDataAndView');
+                }
+            });
+        });
+    </script>
+
+
     @*Grid Initialization Mockup*@
     <script>
         $(function () {
@@ -230,262 +528,13 @@
                 }
             };
 
-            var $grid = $("#grid_editing").pqGrid(obj);
+            var $grid = $("#grid_editing_Mockup").pqGrid(obj);
             //var $pqScrollbar = $grid.find(".pq-sb-horiz");
             //$("#grid_editing").pqScrollBar("option", "bootstrap", { on: false });
             //$("#grid_editing").pqScrollBar({ on: false, slider: 'btn btn-default', up: "glyphicon glyphicon-chevron-up", down: "glyphicon glyphicon-chevron-down", left: "glyphicon glyphicon-chevron-left", right: "glyphicon glyphicon-chevron-right"  });
         });
     </script>
-    @*Grid Initialization*@
-    <script>
-        $(function () {
-            var data = [];
-            @{ int indx = 0;}
-
-            @foreach (var CL in Model)
-            {
-                @:data[@indx] = { 'InstanceName': '@CL.Instance.Name', 'AttributeName': 'Attribute_Val', 'IOTagName': 'IOTagName_Val', 'PLCTagName': '@CL.PLCTag.Name', 'Rack': 1, 'Slot': 2, 'Point': 3, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "IOTagName": "info-readonly"}  };
-                indx++;
-            }
-            //called when save changes button is clicked.
-            function saveChanges() {
-                var grid = $grid.pqGrid('getInstance').grid;
-
-                //debugger;
-                //attempt to save editing cell.
-                if (grid.saveEditCell() === false) {
-                    return false;
-                }
-
-                var datat = $("#grid_editing").pqGrid("getData", { dataIndx: ['InstanceName', 'AttributeName', 'PLCTagName'] });
-                alert(JSON.stringify(datat));
 
 
-                var isDirty = grid.isDirty();
-                if (isDirty) {
-                    //validate the new added rows.
-                    var addList = grid.getChanges().addList;
-                    //debugger;
-                    for (var i = 0; i < addList.length; i++) {
-                        var rowData = addList[i];
-                        var isValid = grid.isValid({ "rowData": rowData }).valid;
-                        if (!isValid) {
-                            return;
-                        }
-                    }
-                    var changes = grid.getChanges({ format: "byVal" });
-
-                    //post changes to server
-                    $.ajax({
-                        dataType: "json",
-                        type: "POST",
-                        async: true,
-                        beforeSend: function (jqXHR, settings) {
-                            grid.showLoading();
-                        },
-                        url: "/pro/products/batch", //for ASP.NET, java
-                        data: { list: JSON.stringify(changes) },
-                        success: function (changes) {
-                            //debugger;
-                            grid.commit({ type: 'add', rows: changes.addList });
-                            grid.commit({ type: 'update', rows: changes.updateList });
-                            grid.commit({ type: 'delete', rows: changes.deleteList });
-
-                            grid.history({ method: 'reset' });
-                        },
-                        complete: function () {
-                            grid.hideLoading();
-                        }
-                    });
-                }
-            }
-            var obj = {
-                hwrap: false,
-                resizable: true,
-                rowBorders: true,
-                virtualX: true,
-                filterModel: { header: true, type: 'local' },
-                trackModel: { on: true }, //to turn on the track changes.
-                toolbar: {
-                    items: [
-                        {
-                            type: 'button', icon: 'ui-icon-plus', label: 'Add Line', listener:
-                                {
-                                    "click": function (evt, ui) {
-                                        //append empty row at the end.
-                                        var rowData = { ProductID: 34, UnitPrice: 0.2 }; //empty row
-                                        var rowIndx = $grid.pqGrid("addRow", { rowData: rowData, checkEditable: true });
-                                        $grid.pqGrid("goToPage", { rowIndx: rowIndx });
-                                        $grid.pqGrid("editFirstCellInRow", { rowIndx: rowIndx });
-                                    }
-                                }
-                        },
-                        { type: 'separator' },
-                        {
-                            type: 'button', icon: 'ui-icon-disk', label: 'Save Changes', cls: 'changes', listener:
-                                {
-                                    "click": function (evt, ui) {
-                                        saveChanges();
-                                    }
-                                },
-                            options: { disabled: true }
-                        },
-                        {
-                            type: 'button', icon: 'ui-icon-cancel', label: 'Reject Changes', cls: 'changes', listener:
-                                {
-                                    "click": function (evt, ui) {
-                                        $grid.pqGrid("rollback");
-                                        $grid.pqGrid("history", { method: 'resetUndo' });
-                                    }
-                                },
-                            options: { disabled: true }
-                        },
-                        { type: 'separator' },
-                        {
-                            type: 'button', icon: 'ui-icon-arrowreturn-1-s', label: 'Undo', cls: 'changes', listener:
-                                {
-                                    "click": function (evt, ui) {
-                                        $grid.pqGrid("history", { method: 'undo' });
-                                    }
-                                },
-                            options: { disabled: true }
-                        },
-                        {
-                            type: 'button', icon: 'ui-icon-arrowrefresh-1-s', label: 'Redo', listener:
-                                {
-                                    "click": function (evt, ui) {
-                                        $grid.pqGrid("history", { method: 'redo' });
-                                    }
-                                },
-                            options: { disabled: true }
-                        }
-                    ]
-                },
-                scrollModel: {
-                    autoFit: true
-                },
-                swipeModel: { on: false },
-                editModel: {
-                    saveKey: $.ui.keyCode.ENTER
-                },
-                editor: {
-                    select: true
-                },
-                title: "<b>IO List</b>",
-                history: function (evt, ui) {
-                    var $grid = $(this);
-                    if (ui.canUndo != null) {
-                        $("button.changes", $grid).button("option", { disabled: !ui.canUndo });
-                    }
-                    if (ui.canRedo != null) {
-                        $("button:contains('Redo')", $grid).button("option", "disabled", !ui.canRedo);
-                    }
-                    $("button:contains('Undo')", $grid).button("option", { label: 'Undo (' + ui.num_undo + ')' });
-                    $("button:contains('Redo')", $grid).button("option", { label: 'Redo (' + ui.num_redo + ')' });
-                },
-                colModel: [
-                    {
-                        title: "INSTANCE", dataType: "string", align: "center", dataIndx: "InstanceName", editable: false, width: 120,
-                        filter: { type: 'textbox', condition: 'begin', listeners: ['keyup'] }
-                    },
-                    {
-                        title: "ATTRIBUTE", dataType: "string", align: "center", dataIndx: "AttributeName", editable: false, width: 120
-                    },
-                    {
-                        title: "IO TAG", dataType: "string", dataIndx: "IOTagName", align: "center", editable: false, width: 80
-                    },
-                    {
-                        title: "PLC TAG", width: 165, dataType: "string", align: "center", dataIndx: "PLCTagName",
-                        //filter: { type: 'textbox', condition: 'begin', listeners: ['keyup'] },
-                        validations: [
-                            { type: 'minLen', value: 1, msg: "Required" },
-                            { type: 'maxLen', value: 40, msg: "length should be <= 40" }
-                        ]
-                    },
-                    {
-                        title: "RACK", width: 50, dataType: "string", align: "center", dataIndx: "Rack",
-                    },
-                    {
-                        title: "SLOT", width: 50, dataType: "string", align: "center", dataIndx: "Slot",
-                    },
-                    {
-                        title: "POINT", width: 50, dataType: "string", align: "center", dataIndx: "Point",
-                    }
-                ],
-                pageModel: { type: "local", rPP: 20 },
-                dataModel: { data: data },
-                change: function (evt, ui) {
-                    //refresh the filter.
-                    if (ui.source != "add") {
-                        $grid.pqGrid("filter", { oper: 'add', data: [] });
-                    }
-                },
-                refresh: function () {
-                    $("#grid_editing").find("button.delete_btn").button({ icons: { primary: 'ui-icon-scissors' } })
-                        .unbind("click")
-                        .bind("click", function (evt) {
-                            var $tr = $(this).closest("tr");
-                            var obj = $grid.pqGrid("getRowIndx", { $tr: $tr });
-                            var rowIndx = obj.rowIndx;
-                            $grid.pqGrid("addClass", { rowIndx: rowIndx, cls: 'pq-row-delete' });
-
-                            var ans = window.confirm("Are you sure to delete row No " + (rowIndx + 1) + "?");
-                            $grid.pqGrid("removeClass", { rowIndx: rowIndx, cls: 'pq-row-delete' });
-                            if (ans) {
-                                $grid.pqGrid("deleteRow", { rowIndx: rowIndx });
-                            }
-                        });
-                }
-            };
-
-            var $grid = $("#grid_editing2").pqGrid(obj);
-        });
-    </script>
-
-    @*Grid Refresh Button*@
-    <script>
-        $('#refresh').on('click', function () {
-            $.ajax({
-                type: 'GET',
-                url: '@Url.Action("Get", "Object", new {  }, "http")',
-                success: function (result) {
-                    var ajxdat = [];
-                    var arrayLength = result.List.length;
-                    for (var i = 0; i < arrayLength; i++) {
-                        ajxdat[i] = { 'InstanceName': '33', 'AttributeName': 'Attribute_Val2', 'IOTagName': 'IOTagName_Val', 'PLCTagName': result.List[i].PLCTag.Name, 'Rack': 1, 'Slot': 4, 'Point': 3, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "IOTagName": "info-readonly"}  };
-                    }
-                    $("#grid_editing").pqGrid("option", "dataModel", { data: ajxdat });
-                    $("#grid_editing").pqGrid('refreshDataAndView');
-                }
-            });
-        });
-    </script>
-
-
-    <script>
-        //debugger;
-        $.fn.bootstrapBtn = $.fn.button.noConflict();
-        $.fn.bootstrapTooltip = $.fn.tooltip.noConflict();
-        //$.paramquery.pqGrid.prototype.options.bootstrap.on = true;
-        //$.paramquery.pqSelect.prototype.options.bootstrap.on = true;
-        if ($.paramquery && $.paramquery.pqGrid) {
-            var options = $.paramquery.pqGrid.prototype.options;
-            var css = $.paramquery.pqGrid.prototype.options.collapsible.css;
-            //css.zIndex = 20000;
-            css.marginTop = "51px";
-            //css.marginLeft = "250px";
-            options.toggle = function (evt, ui) {
-                //debugger;
-                if (ui.state == "max") {
-                    if (this.nodeName) {
-                        $(this).pqGrid("option", "height", "100%-51");
-                    }
-                    else {
-                        this.option("height", "100%-51");
-                    }
-                }
-            }
-        }
-    </script>
 
 }

@@ -22,5 +22,8 @@ namespace IOMappingWebApi.Model
         [JsonIgnore]
         [XmlIgnore()]
         public ICollection<InstanceContent> InstanceContent { get; set; }
+
+        public Instance(string _Name) { Name = _Name; }
+        public Instance() { }
     }
 }

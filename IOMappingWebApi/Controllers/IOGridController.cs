@@ -18,11 +18,20 @@ namespace IOMappingWebApi.Controllers
             UOW = UnitOfWork ?? throw new ArgumentNullException(nameof(UOW));
         }
 
-        // GET /IOGrid
+        // GET /IOGrid/List
         public ViewResult List()
         {
             List<InstanceContent> ContentList = (List<InstanceContent>)UOW.Contents.EntityCollection.Take(10000).OrderBy(c => c.Instance.Name).ToList();
             return View(ContentList);
+        }
+
+        // POST /IOGrid/Post/'Serialized List'
+        [HttpPost]
+        public async Task<HttpResponseMessage> Post([FromBody]  List<InstanceContent> request)
+        {
+            //int a = 0;
+            HttpResponseMessage Response = await UOW.PushRecordsToDbset(request);
+            return Response;
         }
     }
 }

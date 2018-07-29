@@ -11,6 +11,7 @@ namespace IOMappingWebApi.Model
         List<TEntity> EntityCollection { get; set; }
         void Insert(TEntity Entity);
         void PushToDbset(List<TEntity> Entities);
+        void UpdateList(List<TEntity> Entities);
         int GetID(String Name);
     }
 
@@ -43,7 +44,7 @@ namespace IOMappingWebApi.Model
         {
             context.Set<TEntity>().Add(Entity);
         }
-        public void Update(int id, TEntity Entity)
+        public virtual void Update(int id, TEntity Entity)
         {
             using (context)
             {
@@ -89,16 +90,27 @@ namespace IOMappingWebApi.Model
 
             return (List<TEntity>)Results;
         }
-        public void PushToDbset(List<TEntity> Entities)
+        public virtual void PushToDbset(List<TEntity> Entities)
         {
             List<TEntity> Entities_NOTinDb = NOTInDatabase(Entities);
-            InsertList(Entities_NOTinDb);
+            if (Entities_NOTinDb.Count > 0) { InsertList(Entities_NOTinDb); }
+
+            List<TEntity> Entities_inDb = InDatabase(Entities);
+            if (Entities_inDb.Count > 0) { UpdateList(Entities_inDb); }
         }
         public void InsertList(List<TEntity> Entities)
         {
             foreach (TEntity Entity in Entities)
             {
                 Insert(Entity);
+            }
+        }
+
+        public void UpdateList(List<TEntity> Entities)
+        {
+            foreach (TEntity Entity in Entities)
+            {
+                //Update(Entity.ID, Entity);
             }
         }
     }

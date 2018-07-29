@@ -52,14 +52,15 @@ namespace IOMappingWebApi.Controllers
             };
         }
 
-        // POST api/Post/'Serialized Object'
+        // POST api/Object/'Serialized Object'
         [HttpPost]
         public async Task<HttpResponseMessage> Post([FromBody] GalaxyObjects request)
         {
             GalaxyObjects GObjcts = request;
             List <InstanceContent> vContents = GObjcts.List;
-            UOW.PushRecordsToDbset(vContents);
-            return new HttpResponseMessage(HttpStatusCode.OK);
+
+            HttpResponseMessage Response = await UOW.PushRecordsToDbset(vContents);
+            return Response;
         }
 
         // PUT api/values/5

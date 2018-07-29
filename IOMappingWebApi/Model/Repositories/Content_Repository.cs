@@ -63,7 +63,11 @@ namespace IOMappingWebApi.Model
             using (context)
             {
                 var FoundEntity = context.Set<InstanceContent>().Find(id);
-                context.Entry(FoundEntity).CurrentValues.SetValues(Entity);
+                //context.Entry(FoundEntity).CurrentValues.SetValues(Entity);
+                if(FoundEntity != null) { 
+                    context.Entry(FoundEntity).Property("IOTagID").CurrentValue = Entity.IOTagID;
+                    context.Entry(FoundEntity).Property("PLCTagID").CurrentValue = Entity.PLCTagID;
+                }
             }
         }
 
@@ -143,7 +147,10 @@ namespace IOMappingWebApi.Model
         public void PushToDbset(List<InstanceContent> Entities)
         {
             List<InstanceContent> Entities_NOTinDb = NOTInDatabase(Entities);
-            InsertList(Entities_NOTinDb);
+            if (Entities_NOTinDb.Count > 0) { InsertList(Entities_NOTinDb); }
+
+            List<InstanceContent> Entities_inDb = InDatabase(Entities);
+            if (Entities_inDb.Count > 0) { UpdateList(Entities_inDb); }
         }
         public void InsertList(List<InstanceContent> Entities)
         {
@@ -154,9 +161,20 @@ namespace IOMappingWebApi.Model
         }
         public void UpdateList(List<InstanceContent> Entities)
         {
-            foreach (InstanceContent Entity in Entities)
+            using (var ctx = context)
             {
-                Update(Entity.InstanceContentID,Entity);
+                foreach (InstanceContent Entity in Entities)
+                {
+                    int id = Entity.InstanceContentID;
+                    var FoundEntity = ctx.Set<InstanceContent>().Find(id);
+                    //context.Entry(FoundEntity).CurrentValues.SetValues(Entity);
+                    if (FoundEntity != null)
+                    {
+                        ctx.Entry(FoundEntity).Property("IOTagID").CurrentValue = Entity.IOTagID;
+                        ctx.Entry(FoundEntity).Property("PLCTagID").CurrentValue = Entity.PLCTagID;
+                    }
+                }
+            ctx.SaveChanges();
             }
         }
         public void DeleteList(List<InstanceContent> Entities)

@@ -28,6 +28,9 @@ namespace IOMappingWebApi.Model
         //Navigation Property (So that it can point to PLC Object)
         [XmlElement("PLC")]
         public PLC PLC { get; set; }
+
+        public IOTag(string _Name) { Name = _Name; }
+        public IOTag() { }
     }
 
 }
