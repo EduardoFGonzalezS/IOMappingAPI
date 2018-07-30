@@ -50,84 +50,114 @@ namespace IOMappingWebApi.Model
         public GalaxyObject_UoW(GalaxyObjectContext ctx)
         {
             context = ctx;
+            PLCs = new PLC_Repository(context);
             Attributes = new Attribute_Repository(context);
-            PLCTags = new PLCTag_Repository(context);
+            PLCTags = new PLCTag_Repository(context, PLCs);
             IOTags = new IOTag_Repository(context);
             Contents = new Content_Repository(context);
             Instances = new Instance_Repository(context);
-            PLCs = new PLC_Repository(context);
+            
         }
 
+        /// <summary>
+        /// Evaluates a collection of records, and takes care of the whole CRUD operation.
+        /// Meaning, it checks existance in database, and if not found, its created in database.
+        /// If it exists in database with different info, it updates the database.
+        /// In other words, "syncs" the received collection of contents to the database.
+        /// /// </summary>
+        /// <param name="_Content">A list of instance content to be added / updated to the database ///</param>
         public async Task<HttpResponseMessage> PushRecordsToDbset(List<InstanceContent> _Contents)
         {
+            //01 - Initial Response
             HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.BadRequest);
             response.ReasonPhrase = "Request did not initialize";
 
+            //02 - Check all PLC entities passed in argument, and push them to the database
+            List<PLC> PLCs_FromContents = _Contents.Select(c => c.IOTag.PLC)
+                                .Union(_Contents.Select(c => c.PLCTag.PLC))
+                                .Where(vPLC => vPLC != null)
+                                .GroupBy(vPLC => vPLC.Name)
+                                .Select(vPLC => vPLC.First()).ToList();
+            List<PLC> PLCs_ToPush = PLCs.GetListSyncFromDB(PLCs_FromContents);
 
-            List<PLC> PLCs1 = _Contents.Select(c => c.IOTag.PLC).ToList();
-            List<PLC> PLCs2 = _Contents.Select(c => c.PLCTag.PLC).ToList();
-            List<PLC> PLCs_ToPush = PLCs1.Union(PLCs2).ToList();
             PLCs.PushToDbset(PLCs_ToPush);
 
+            //03 - SAVE THE DB CONTEXT ########  
             context.SaveChanges();
 
+            //04 - Extract the individual entities (PLCTags, Instances, etc.) from the collection. 
+            //These objects will be pushed to the database. In case of missing Null Info, try to update it from the database
             List<Attribute> Attributes_ToPush = _Contents.Select(c => c.Attribute).ToList();
             List<Instance> Instances_ToPush = _Contents.Select(c => c.Instance).ToList();
             List<IOTag> IOTags_FromContents = _Contents.Select(c => c.IOTag).ToList();
             List<IOTag> IOTags_ToPush = IOTag_UpdatedPLCIDs(IOTags_FromContents);
 
-            List<PLCTag> PLCTags_FromContents = _Contents.Select(c => c.PLCTag).ToList();
-            List<PLCTag> PLCTags_ToPush = PLCTags_FromContents;// PLCTag_UpdatedPLCIDs(PLCTags_FromContents);
 
+            List<PLCTag> PLCTags_FromContents = _Contents.Select(c => c.PLCTag).ToList();
+            List<PLCTag> PLCTags_ToPush = PLCTags.GetListSyncFromDB(PLCTags_FromContents);
+
+            //05 - Push individual entities to Database.
             Attributes.PushToDbset(Attributes_ToPush);
             Instances.PushToDbset(Instances_ToPush);
             IOTags.PushToDbset(IOTags_ToPush);
             PLCTags.PushToDbset(PLCTags_ToPush);
 
+            //06 - SAVE THE DB CONTEXT ########  
             context.SaveChanges();
 
+            //07 - Update the Primary Keys on all entities on the contents collection. This info is extracted from the database.
+            // After that, push to database.
             List<InstanceContent> PContents = FetchIds(_Contents);
-
             Contents.PushToDbset(PContents);
-            //context.SaveChanges();
 
+            //09 - SAVE THE DB CONTEXT ########
+            context.SaveChanges();
+
+            //EXTRA - For future use
             //List<InstanceContent> Surplus = Contents.SurplusInDatabase(PContents);
             //Contents.DeleteList(Surplus);
-
             //context.SaveChanges();
 
-            Debug.WriteLine(6666666666); //--------------------------------------------
             response = new HttpResponseMessage(HttpStatusCode.OK);
             return response;
         }
 
         private List<InstanceContent> FetchIds(List<InstanceContent> _ContentList)
         {
-            List<InstanceContent> ReturnList = new List<InstanceContent>();
-            int f_InstanceID; int f_AttributeID; int f_IOTagID; int f_PLCTagID; int f_ContentID;
-
-            foreach (InstanceContent ic in _ContentList)
-            {
-                f_InstanceID = Instances.GetID(ic.Instance.Name);
-                f_AttributeID = Attributes.GetID(ic.Attribute.Name);
-                f_IOTagID = IOTags.GetID(ic.IOTag.Name);
-                f_PLCTagID = PLCTags.GetID(ic.PLCTag.Name);
-                f_ContentID = Contents.GetID(ic.Instance.Name, ic.Attribute.Name);
-
-                ReturnList.Add(
-                    new InstanceContent
-                    {
-                        InstanceContentID = f_ContentID,
-                        InstanceID = f_InstanceID,
-                        Instance = new Instance { Name = ic.Instance.Name, ID = f_InstanceID },
-                        AttributeID = f_AttributeID,
-                        Attribute = new Attribute { Name = ic.Attribute.Name, ID = f_AttributeID },
-                        IOTagID = f_IOTagID,
-                        IOTag = new IOTag { Name = ic.IOTag.Name, ID = f_IOTagID },
-                        PLCTagID = f_PLCTagID,
-                        PLCTag = new PLCTag { Name = ic.PLCTag.Name, ID = f_PLCTagID }
-                    });
-            }
+            List<InstanceContent> ReturnList = (from Cont in _ContentList
+                                                join db in Contents.EntityCollection
+                                                on
+                                                new { InstanceName = Cont.Instance.Name, AttributeName = Cont.Attribute.Name, IOTagName = Cont.IOTag.Name, PLCTagName = Cont.PLCTag.Name }
+                                                equals
+                                                new { InstanceName = db.Instance.Name, AttributeName = db.Attribute.Name, IOTagName = db.IOTag.Name, PLCTagName = db.PLCTag.Name }
+                                                into JoinedTbl
+                                                from db in JoinedTbl.DefaultIfEmpty(
+                                                    new InstanceContent()
+                                                            {
+                                                                InstanceContentID = Contents.GetID(Cont.Instance.Name, Cont.Attribute.Name),
+                                                                InstanceID = Instances.GetID(Cont.Instance.Name),
+                                                                Instance = new Instance { Name = Cont.Instance.Name, ID = Instances.GetID(Cont.Instance.Name) },
+                                                                AttributeID = Attributes.GetID(Cont.Attribute.Name),
+                                                                Attribute = new Attribute { Name = Cont.Attribute.Name, ID = Attributes.GetID(Cont.Attribute.Name) },
+                                                                IOTagID = IOTags.GetID(Cont.IOTag.Name),
+                                                                IOTag = new IOTag { Name = Cont.IOTag.Name, ID = IOTags.GetID(Cont.IOTag.Name) },
+                                                                PLCTagID = PLCTags.GetID(Cont.PLCTag.Name),
+                                                                PLCTag = new PLCTag { Name = Cont.PLCTag.Name, ID = PLCTags.GetID(Cont.PLCTag.Name) }
+                                                            }
+                                                    )
+                                                select new InstanceContent
+                                                {
+                                                    InstanceContentID = db != null ? db.InstanceContentID : 0,
+                                                    InstanceID = db != null ? db.InstanceID : 0,
+                                                    Instance = db != null ? db.Instance: new Instance { Name = Cont.Instance.Name, ID = 0 },
+                                                    AttributeID = db != null ? db.AttributeID : 0,
+                                                    Attribute = db != null ? db.Attribute : new Attribute { Name = Cont.Attribute.Name, ID = 0 },
+                                                    IOTagID = db != null ? db.IOTagID : 0,
+                                                    IOTag = db != null ? db.IOTag : new IOTag { Name = Cont.IOTag.Name, ID = 0, PLCID = 0, PLC = new PLC() },
+                                                    PLCTagID = db != null ? db.PLCTagID : 0,
+                                                    PLCTag = db != null ? db.PLCTag : new PLCTag { Name = Cont.PLCTag.Name, ID = 0,
+                                                        Rack = Cont.PLCTag.Rack, Slot = Cont.PLCTag.Slot, Point = Cont.PLCTag.Point, PLCID = 0, PLC = new PLC() }
+                                                }).ToList();
             return ReturnList;
         }
 
@@ -142,7 +172,7 @@ namespace IOMappingWebApi.Model
                                            Name = ents.Name,
                                            ID = ents.ID,
                                            PLCID = db != null ? db.PLC.ID : 0,
-                                           PLC = new PLC { Name = ents.PLC.Name, ID = db != null ? db.PLC.ID : 0 },
+                                           PLC = db != null ? db.PLC : new PLC (),
                                            Rack = ents.Rack,
                                            Slot = ents.Slot,
                                            Point = ents.Point
@@ -163,7 +193,7 @@ namespace IOMappingWebApi.Model
                                    Name = ents.Name,
                                    ID = ents.ID,
                                    PLCID = db != null ? db.PLC.ID : 0 ,
-                                   PLC = new PLC{Name = ents.PLC.Name, ID = db != null ? db.PLC.ID : 0 }
+                                   PLC = db != null ? db.PLC : new PLC { Name = ents.PLC.Name }
                                }
                                ).ToList();
 

@@ -60,14 +60,14 @@ namespace IOMappingWebApi.Model
         }
         public void Update(int id, InstanceContent Entity)
         {
-            using (context)
+            using (var ctx = context)
             {
-                var FoundEntity = context.Set<InstanceContent>().Find(id);
-                //context.Entry(FoundEntity).CurrentValues.SetValues(Entity);
-                if(FoundEntity != null) { 
-                    context.Entry(FoundEntity).Property("IOTagID").CurrentValue = Entity.IOTagID;
-                    context.Entry(FoundEntity).Property("PLCTagID").CurrentValue = Entity.PLCTagID;
-                }
+                var FoundEntity = ctx.Set<InstanceContent>().Find(id);
+
+                if (FoundEntity != null)
+                { ctx.Entry(FoundEntity).CurrentValues.SetValues(Entity); }
+
+                ctx.SaveChanges();
             }
         }
 
@@ -87,7 +87,7 @@ namespace IOMappingWebApi.Model
         public List<InstanceContent> InDatabase(List<InstanceContent> Entities)
         {
             var Results = (from ents in Entities
-                           join db in context.InstanceContent on
+                           join db in context.Set<InstanceContent>() on
                            new { AttributeID = ents.AttributeID, InstanceID = ents.InstanceID }
                            equals
                            new { AttributeID = db.AttributeID, InstanceID = db.InstanceID }
@@ -119,6 +119,7 @@ namespace IOMappingWebApi.Model
         /// <returns>Records from List() Parameter that are NOT found on the Database</returns>  
         public List<InstanceContent> NOTInDatabase(List<InstanceContent> Entities)
         {
+
             var Results = (from ents in Entities
                            join db in context.InstanceContent on
                            new {AttributeID = ents.AttributeID , InstanceID = ents.InstanceID}
@@ -127,7 +128,7 @@ namespace IOMappingWebApi.Model
                            into DbResults
                            where !DbResults.Any()
                            select ents).ToList();
-
+            int a = 0;
             return (List<InstanceContent>)Results;
         }
 
@@ -144,6 +145,14 @@ namespace IOMappingWebApi.Model
 
             return Surplus.ToList();
         }
+
+        /// <summary>
+        /// Evaluates a collection of entities, and takes care of the whole CRUD operation.
+        /// Meaning, it checks existance in database, and if not found, its created in database.
+        /// If it exists in database with different info, it updates the database.
+        /// In other words, "syncs" the received collection of entities to the database.
+        /// /// </summary>
+        /// <param name="Entities">A list of Entities to be added / updated to the database ///</param>
         public void PushToDbset(List<InstanceContent> Entities)
         {
             List<InstanceContent> Entities_NOTinDb = NOTInDatabase(Entities);
@@ -152,31 +161,36 @@ namespace IOMappingWebApi.Model
             List<InstanceContent> Entities_inDb = InDatabase(Entities);
             if (Entities_inDb.Count > 0) { UpdateList(Entities_inDb); }
         }
+
+        /// <summary>
+        /// Inserts (Bulk operation) a whole list of entities into the database
+        /// /// </summary>
+        /// <param name="Entities">A list of instance content to be inserted to the database ///</param>
         public void InsertList(List<InstanceContent> Entities)
         {
             foreach (InstanceContent Entity in Entities)
             {
-                Insert(Entity);
+                if (Entity != null)
+                { context.Set<InstanceContent>().Add(Entity); }
             }
         }
+
+        /// <summary>
+        /// Updates (Bulk operation) a whole list of entities in the database
+        /// /// </summary>
+        /// <param name="Entities">A list of instance content to be updated in the database ///</param>
         public void UpdateList(List<InstanceContent> Entities)
         {
-            using (var ctx = context)
+            foreach (InstanceContent Entity in Entities)
             {
-                foreach (InstanceContent Entity in Entities)
-                {
-                    int id = Entity.InstanceContentID;
-                    var FoundEntity = ctx.Set<InstanceContent>().Find(id);
-                    //context.Entry(FoundEntity).CurrentValues.SetValues(Entity);
-                    if (FoundEntity != null)
-                    {
-                        ctx.Entry(FoundEntity).Property("IOTagID").CurrentValue = Entity.IOTagID;
-                        ctx.Entry(FoundEntity).Property("PLCTagID").CurrentValue = Entity.PLCTagID;
-                    }
-                }
-            ctx.SaveChanges();
+                int id = Entity.InstanceContentID;
+                var FoundEntity = context.Set<InstanceContent>().Find(id);
+
+                if (FoundEntity != null && FoundEntity != Entity)
+                { context.Entry(FoundEntity).CurrentValues.SetValues(Entity); }
             }
         }
+
         public void DeleteList(List<InstanceContent> Entities)
         {
             foreach (InstanceContent Entity in Entities)

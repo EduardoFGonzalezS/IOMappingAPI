@@ -16,6 +16,7 @@ namespace IOMappingWebApi.Model
         [XmlElement("ID")]
         public int ID { get; set; }
         [XmlElement("Name")]
+        
         public string Name { get; set; }
         [XmlElement("Rack")]
         public int Rack { get; set; }
@@ -24,6 +25,7 @@ namespace IOMappingWebApi.Model
         [XmlElement("Point")]
         public int Point { get; set; }
         [XmlElement("PLCID")]
+        [ForeignKey("PLC")]
         public int PLCID { get; set; }
 
         //Navigation Property (So that it can be pointed from the InstanceContent Object)

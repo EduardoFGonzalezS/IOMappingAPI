@@ -13,6 +13,8 @@ namespace IOMappingWebApi.Model
         void PushToDbset(List<TEntity> Entities);
         void UpdateList(List<TEntity> Entities);
         int GetID(String Name);
+        List<TEntity> GetListSyncFromDB(List<TEntity> _Entities);
+        TEntity GetSyncFromDB(TEntity _Entity);
     }
 
     public abstract class RecordRepository<TEntity> where TEntity : class, ISimpleRecord, new()
@@ -39,6 +41,7 @@ namespace IOMappingWebApi.Model
             }
         }
 
+
         // #04 - Methods (Single Operations)
         public void Insert(TEntity Entity)
         {
@@ -46,10 +49,14 @@ namespace IOMappingWebApi.Model
         }
         public virtual void Update(int id, TEntity Entity)
         {
-            using (context)
+            using (var ctx = context)
             {
-                var FoundEntity = context.Set<TEntity>().Find(id);
-                context.Entry(FoundEntity).CurrentValues.SetValues(Entity);
+                var FoundEntity = ctx.Set<TEntity>().Find(id);
+
+                if (FoundEntity != null)
+                { ctx.Entry(FoundEntity).CurrentValues.SetValues(Entity); }
+
+                ctx.SaveChanges();
             }
         }
         public int GetID(String Name)
@@ -59,6 +66,17 @@ namespace IOMappingWebApi.Model
 
             if (FoundEntity == null) { returnint = -1;  } else { returnint = FoundEntity.ID; }
             return returnint;
+        }
+
+        public virtual TEntity GetSyncFromDB(TEntity _Entity)
+        {
+            var FoundEntity = context.Set<TEntity>().FirstOrDefault(e => e.Name == _Entity.Name);
+            if (FoundEntity == null) { return _Entity; } else { return FoundEntity; }
+        }
+        public virtual List<TEntity> GetListSyncFromDB(List<TEntity> _Entities)
+        {
+            List<TEntity> UpdatedList = _Entities.Select(ent => GetSyncFromDB(ent)).ToList();
+            return UpdatedList;
         }
 
         // #05 - Methods (BULK Operations)
@@ -98,11 +116,12 @@ namespace IOMappingWebApi.Model
             List<TEntity> Entities_inDb = InDatabase(Entities);
             if (Entities_inDb.Count > 0) { UpdateList(Entities_inDb); }
         }
-        public void InsertList(List<TEntity> Entities)
+        public virtual void InsertList(List<TEntity> Entities)
         {
             foreach (TEntity Entity in Entities)
             {
-                Insert(Entity);
+                if (Entity != null)
+                { context.Set<TEntity>().Add(Entity); }
             }
         }
 
@@ -110,7 +129,11 @@ namespace IOMappingWebApi.Model
         {
             foreach (TEntity Entity in Entities)
             {
-                //Update(Entity.ID, Entity);
+                int id = Entity.ID;
+                var FoundEntity = context.Set<TEntity>().Find(id);
+
+                if (FoundEntity != null && FoundEntity != Entity)
+                { context.Entry(FoundEntity).CurrentValues.SetValues(Entity); }
             }
         }
     }

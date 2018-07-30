@@ -38,6 +38,7 @@ namespace IOMappingWebApi
             services.AddDbContext<GalaxyObjectContext>(options =>
             {
                 options.UseSqlServer(Configuration["ConnectionString"],
+                
                 sqlServerOptionsAction: sqlOptions =>
                 {
                     sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
@@ -48,6 +49,7 @@ namespace IOMappingWebApi
                         errorNumbersToAdd: null);
 
                 });
+
                 // Changing default behavior when client evaluation occurs to throw.
                 // Default in EFCore would be to log warning when client evaluation is done.
                 //options.ConfigureWarnings(warnings => warnings.Throw(
