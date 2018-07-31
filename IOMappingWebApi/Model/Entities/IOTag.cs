@@ -18,6 +18,7 @@ namespace IOMappingWebApi.Model
         [XmlElement("Name")]
         public string Name { get; set; }
         [XmlElement("PLCID")]
+        [ForeignKey("PLC")]
         public int PLCID { get; set; }
 
         //Navigation Property (So that it can be pointed from the InstanceContent Object)

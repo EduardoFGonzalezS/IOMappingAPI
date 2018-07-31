@@ -50,6 +50,7 @@ namespace IOMappingWebApi.Model
             else
             {
                 FoundEntity.PLC = PLCs.GetSyncFromDB(_Entity.PLC);
+                FoundEntity.Rack = _Entity.Rack; FoundEntity.Slot = _Entity.Slot; FoundEntity.Point = _Entity.Point;
                 ret = FoundEntity;
             }
             return ret;
@@ -74,7 +75,4 @@ namespace IOMappingWebApi.Model
             }
         }
     }
-
-
-
 }

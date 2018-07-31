@@ -41,7 +41,6 @@ namespace IOMappingWebApi.Model
             }
         }
 
-
         // #04 - Methods (Single Operations)
         public void Insert(TEntity Entity)
         {
@@ -108,12 +107,15 @@ namespace IOMappingWebApi.Model
 
             return (List<TEntity>)Results;
         }
+
         public virtual void PushToDbset(List<TEntity> Entities)
         {
-            List<TEntity> Entities_NOTinDb = NOTInDatabase(Entities);
+            List<TEntity> EntsToPush = GetListSyncFromDB(Entities);
+
+            List<TEntity> Entities_NOTinDb = NOTInDatabase(EntsToPush);
             if (Entities_NOTinDb.Count > 0) { InsertList(Entities_NOTinDb); }
 
-            List<TEntity> Entities_inDb = InDatabase(Entities);
+            List<TEntity> Entities_inDb = InDatabase(EntsToPush);
             if (Entities_inDb.Count > 0) { UpdateList(Entities_inDb); }
         }
         public virtual void InsertList(List<TEntity> Entities)
