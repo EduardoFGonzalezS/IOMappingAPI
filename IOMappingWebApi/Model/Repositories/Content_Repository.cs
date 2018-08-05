@@ -174,10 +174,27 @@ namespace IOMappingWebApi.Model
         /// <param name="Entities">A list of Entities to be added / updated to the database ///</param>
         public void PushToDbset(List<InstanceContent> Entities)
         {
-            List<InstanceContent> Entities_NOTinDb = NOTInDatabase(Entities);
+            //Extract Contained Classes, and push them to the database
+            List<Attribute> Attributes_ToPush = Entities.Select(c => c.Attribute).ToList();
+            List<Instance> Instances_ToPush = Entities.Select(c => c.Instance).ToList();
+            List<IOTag> IOTags_ToPush = Entities.Select(c => c.IOTag).ToList();
+            List<PLCTag> PLCTags_ToPush = Entities.Select(c => c.PLCTag).ToList();
+
+            Attributes.PushToDbset(Attributes_ToPush);
+            Instances.PushToDbset(Instances_ToPush);
+            IOTags.PushToDbset(IOTags_ToPush);
+            PLCTags.PushToDbset(PLCTags_ToPush);
+            context.SaveChanges();
+
+            //Update the contained classes in the entities, so that they are not null or incomplete
+            List<InstanceContent> EntsToPush = GetListSyncFromDB(Entities);
+
+            //Find contents that as NOT in the database, and insert them
+            List<InstanceContent> Entities_NOTinDb = NOTInDatabase(EntsToPush);
             if (Entities_NOTinDb.Count > 0) { InsertList(Entities_NOTinDb); }
 
-            List<InstanceContent> Entities_inDb = InDatabase(Entities);
+            //Find contents that are in the database, and update them
+            List<InstanceContent> Entities_inDb = InDatabase(EntsToPush);
             if (Entities_inDb.Count > 0) { UpdateList(Entities_inDb); }
         }
 

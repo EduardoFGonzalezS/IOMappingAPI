@@ -56,30 +56,12 @@ namespace IOMappingWebApi
                 //    RelationalEventId.QueryClientEvaluationWarning));
             });
 
-            //services.AddScoped<IContent_Repository, Content_Repository>
-            //    (typeof(GalaxyObjectContext),
-            //    typeof(IInstance_Repository),
-            //    typeof(IAttribute_Repository),
-            //    typeof(IIOTag_Repository),
-            //    typeof(IPLCTag_Repository)
-            //    );
-
-
-
-            //services.AddScoped<IGalaxyObject_UoW>(s => new GalaxyObject_UoW(new GalaxyObjectContext())
-            //{
-            //    Instances = new Instance_Repository();
-
-            //});
-
-
             services.AddScoped<IContent_Repository, Content_Repository>();
             services.AddScoped<IAttribute_Repository, Attribute_Repository>();
             services.AddScoped<IInstance_Repository, Instance_Repository>();
             services.AddScoped<IIOTag_Repository, IOTag_Repository>();
             services.AddScoped<IPLCTag_Repository, PLCTag_Repository>();
             services.AddScoped<IPLC_Repository, PLC_Repository>();
-            services.AddScoped<IGalaxyObject_UoW, GalaxyObject_UoW>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

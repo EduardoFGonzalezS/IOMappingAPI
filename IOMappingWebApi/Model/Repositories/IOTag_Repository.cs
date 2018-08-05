@@ -57,5 +57,24 @@ namespace IOMappingWebApi.Model
                 .ToList();
             return UpdatedList;
         }
+
+        public override void PushToDbset(List<IOTag> Entities)
+        {
+            List<PLC> PLCs_ToPush = Entities.Select(e => e.PLC)
+                                .Where(vPLC => vPLC != null)
+                                .GroupBy(vPLC => vPLC.Name)
+                                .Select(vPLC => vPLC.First()).ToList();
+
+            PLCs.PushToDbset(PLCs_ToPush);
+            context.SaveChanges();
+
+            List<IOTag> EntsToPush = GetListSyncFromDB(Entities);
+
+            List<IOTag> Entities_NOTinDb = NOTInDatabase(EntsToPush);
+            if (Entities_NOTinDb.Count > 0) { InsertList(Entities_NOTinDb); }
+
+            List<IOTag> Entities_inDb = InDatabase(EntsToPush);
+            if (Entities_inDb.Count > 0) { UpdateList(Entities_inDb); }
+        }
     }
 }

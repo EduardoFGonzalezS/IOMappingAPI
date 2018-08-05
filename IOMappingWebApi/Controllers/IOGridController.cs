@@ -12,16 +12,20 @@ namespace IOMappingWebApi.Controllers
 {
     public class IOGridController : Controller
     {
-        private IGalaxyObject_UoW UOW;
-        public IOGridController(IGalaxyObject_UoW UnitOfWork)
+        private IContent_Repository Contents;
+        private GalaxyObjectContext context;
+
+        public IOGridController(GalaxyObjectContext ctx, IContent_Repository _Contents)
         {
-            UOW = UnitOfWork ?? throw new ArgumentNullException(nameof(UOW));
+            context = ctx;
+            Contents = _Contents ?? throw new ArgumentNullException(nameof(Contents));
+            Contents.context = ctx;
         }
 
         // GET /IOGrid/List
         public ViewResult List()
         {
-            List<InstanceContent> ContentList = (List<InstanceContent>)UOW.Contents.EntityCollection.Take(10000).OrderBy(c => c.Instance.Name).ToList();
+            List<InstanceContent> ContentList = (List<InstanceContent>)Contents.EntityCollection.Take(10000).OrderBy(c => c.Instance.Name).ToList();
             return View(ContentList);
         }
 
@@ -29,9 +33,14 @@ namespace IOMappingWebApi.Controllers
         [HttpPost]
         public async Task<HttpResponseMessage> Post([FromBody]  List<InstanceContent> request)
         {
-            //int a = 0;
-            HttpResponseMessage Response = await UOW.PushRecordsToDbset(request);
-            return Response;
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.BadRequest);
+            response.ReasonPhrase = "Request did not initialize";
+
+            Contents.PushToDbset(request);
+            Contents.context.SaveChanges();
+
+            response = new HttpResponseMessage(HttpStatusCode.OK);
+            return response;
         }
     }
 }

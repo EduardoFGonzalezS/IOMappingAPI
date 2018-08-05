@@ -17,10 +17,14 @@ namespace IOMappingWebApi.Controllers
     [Route("api/[controller]")]
     public class ObjectXMLController : Controller
     {
-        private IGalaxyObject_UoW UOW;
-        public ObjectXMLController(IGalaxyObject_UoW UnitOfWork)
+        private IContent_Repository Contents;
+        private GalaxyObjectContext context;
+
+        public ObjectXMLController(GalaxyObjectContext ctx, IContent_Repository _Contents)
         {
-            UOW = UnitOfWork ?? throw new ArgumentNullException(nameof(UOW));
+            context = ctx;
+            Contents = _Contents ?? throw new ArgumentNullException(nameof(Contents));
+            Contents.context = ctx;
         }
 
         // GET api/ObjectXML/'ObjectName'
@@ -28,7 +32,7 @@ namespace IOMappingWebApi.Controllers
         [Route("{InstanceName}")]
         public ActionResult Get(string InstanceName)
         {
-            List<InstanceContent> ContentList = (List<InstanceContent>)UOW.Contents.EntityCollection.Where(c => c.Instance.Name == InstanceName).ToList();
+            List<InstanceContent> ContentList = (List<InstanceContent>)Contents.EntityCollection.Where(c => c.Instance.Name == InstanceName).ToList();
 
             GalaxyObjects GObjcts = new GalaxyObjects();
             GObjcts.List = ContentList;
@@ -52,7 +56,7 @@ namespace IOMappingWebApi.Controllers
         [HttpGet]
         public ActionResult Get()
         {
-            List<InstanceContent> ContentList = (List<InstanceContent>)UOW.Contents.EntityCollection.Take(10000).OrderBy(c => c.Instance.Name).ToList();
+            List<InstanceContent> ContentList = (List<InstanceContent>)Contents.EntityCollection.Take(10000).OrderBy(c => c.Instance.Name).ToList();
 
             GalaxyObjects GObjcts = new GalaxyObjects();
             GObjcts.List = ContentList;
@@ -78,8 +82,15 @@ namespace IOMappingWebApi.Controllers
         {
             GalaxyObjects GObjcts = request;
             List<InstanceContent> vContents = GObjcts.List;
-            UOW.PushRecordsToDbset(vContents);
-            return new HttpResponseMessage(HttpStatusCode.OK);
+
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.BadRequest);
+            response.ReasonPhrase = "Request did not initialize";
+
+            Contents.PushToDbset(vContents);
+            Contents.context.SaveChanges();
+
+            response = new HttpResponseMessage(HttpStatusCode.OK);
+            return response;
         }
 
         // PUT api/values/5
