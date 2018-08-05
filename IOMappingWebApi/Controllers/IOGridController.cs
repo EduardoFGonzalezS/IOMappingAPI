@@ -25,7 +25,21 @@ namespace IOMappingWebApi.Controllers
         // GET /IOGrid/List
         public ViewResult List()
         {
-            List<InstanceContent> ContentList = (List<InstanceContent>)Contents.EntityCollection.Take(10000).OrderBy(c => c.Instance.Name).ToList();
+            List<InstanceContent> ContentList = (List<InstanceContent>)Contents.EntityCollection
+                .Take(10000)
+                .OrderBy(c => c.Instance.Name)
+                .Select(c => new InstanceContent{
+                    InstanceContentID = c.InstanceContentID,
+                    Instance = c.Instance,
+                    InstanceID = c.InstanceID,
+                    Attribute = c.Attribute,
+                    AttributeID = c.AttributeID,
+                    PLCTag = c.PLCTag ?? new PLCTag("N/A") { PLC = new PLC("N/A")},
+                    PLCTagID = c.PLCTagID ?? 0,
+                    IOTag = c.IOTag,
+                    IOTagID = c.IOTagID
+                }).ToList();
+
             return View(ContentList);
         }
 

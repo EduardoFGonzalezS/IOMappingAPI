@@ -77,21 +77,27 @@ namespace IOMappingWebApi.Model
 
         public override void PushToDbset(List<PLCTag> Entities)
         {
-            List<PLC> PLCs_ToPush = Entities.Select(e => e.PLC)
-                                .Where(vPLC => vPLC != null)
-                                .GroupBy(vPLC => vPLC.Name)
-                                .Select(vPLC => vPLC.First()).ToList();
 
-            PLCs.PushToDbset(PLCs_ToPush);
-            context.SaveChanges();
+            List<PLC> PLCs_ToPush = Entities
+                    .OfType<PLCTag>()
+                    .Select(e => e.PLC)
+                    .OfType<PLC>()
+                    .GroupBy(vPLC => vPLC.Name)
+                    .Select(vPLC => vPLC.First()).ToList();
 
-            List<PLCTag> EntsToPush = GetListSyncFromDB(Entities);
+            if (PLCs_ToPush.Any())
+            { 
+                PLCs.PushToDbset(PLCs_ToPush);
+                context.SaveChanges();
 
-            List<PLCTag> Entities_NOTinDb = NOTInDatabase(EntsToPush);
-            if (Entities_NOTinDb.Count > 0) { InsertList(Entities_NOTinDb); }
+                List<PLCTag> EntsToPush = GetListSyncFromDB(Entities);
 
-            List<PLCTag> Entities_inDb = InDatabase(EntsToPush);
-            if (Entities_inDb.Count > 0) { UpdateList(Entities_inDb); }
+                List<PLCTag> Entities_NOTinDb = NOTInDatabase(EntsToPush);
+                if (Entities_NOTinDb.Count > 0) { InsertList(Entities_NOTinDb); }
+
+                List<PLCTag> Entities_inDb = InDatabase(EntsToPush);
+                if (Entities_inDb.Count > 0) { UpdateList(Entities_inDb); }
+            }
         }
     }
 }

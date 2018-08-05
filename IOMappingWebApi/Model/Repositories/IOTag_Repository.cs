@@ -60,13 +60,18 @@ namespace IOMappingWebApi.Model
 
         public override void PushToDbset(List<IOTag> Entities)
         {
-            List<PLC> PLCs_ToPush = Entities.Select(e => e.PLC)
-                                .Where(vPLC => vPLC != null)
-                                .GroupBy(vPLC => vPLC.Name)
-                                .Select(vPLC => vPLC.First()).ToList();
+            List<PLC> PLCs_ToPush = Entities
+                    .OfType<IOTag>()
+                    .Select(e => e.PLC)
+                    .OfType<PLC>()
+                    .GroupBy(vPLC => vPLC.Name)
+                    .Select(vPLC => vPLC.First()).ToList();
 
-            PLCs.PushToDbset(PLCs_ToPush);
-            context.SaveChanges();
+            if (PLCs_ToPush.Any())
+            {
+                PLCs.PushToDbset(PLCs_ToPush);
+                context.SaveChanges();
+            }
 
             List<IOTag> EntsToPush = GetListSyncFromDB(Entities);
 

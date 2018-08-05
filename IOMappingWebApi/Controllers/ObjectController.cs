@@ -67,6 +67,7 @@ namespace IOMappingWebApi.Controllers
             response.ReasonPhrase = "Request did not initialize";
 
             Contents.PushToDbset(vContents);
+
             Contents.context.SaveChanges();
             //HttpResponseMessage Response = await Contents.PushToDbset(vContents);
 

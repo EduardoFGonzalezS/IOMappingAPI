@@ -94,7 +94,11 @@ namespace IOMappingWebApi.Model
         {
             var FoundEntity = context.Set<InstanceContent>()
                 .FirstOrDefault(e => e.Instance.Name == InstanceName && e.Attribute.Name == AttributeName);
-            return FoundEntity.InstanceContentID;
+
+            if (FoundEntity != null)
+            { return FoundEntity.InstanceContentID; }
+            else
+            { return 0; }   
         }
 
         // #05 - Methods (BULK Operations)
@@ -178,6 +182,7 @@ namespace IOMappingWebApi.Model
             List<Attribute> Attributes_ToPush = Entities.Select(c => c.Attribute).ToList();
             List<Instance> Instances_ToPush = Entities.Select(c => c.Instance).ToList();
             List<IOTag> IOTags_ToPush = Entities.Select(c => c.IOTag).ToList();
+
             List<PLCTag> PLCTags_ToPush = Entities.Select(c => c.PLCTag).ToList();
 
             Attributes.PushToDbset(Attributes_ToPush);
@@ -191,7 +196,8 @@ namespace IOMappingWebApi.Model
 
             //Find contents that as NOT in the database, and insert them
             List<InstanceContent> Entities_NOTinDb = NOTInDatabase(EntsToPush);
-            if (Entities_NOTinDb.Count > 0) { InsertList(Entities_NOTinDb); }
+            if (Entities_NOTinDb.Count
+                > 0) { InsertList(Entities_NOTinDb); }
 
             //Find contents that are in the database, and update them
             List<InstanceContent> Entities_inDb = InDatabase(EntsToPush);
@@ -237,8 +243,8 @@ namespace IOMappingWebApi.Model
                                                     InstanceID = Instances.GetID(Cont.Instance.Name),
                                                     Attribute = Attributes.GetSyncFromDB(Cont.Attribute),
                                                     AttributeID = Attributes.GetID(Cont.Attribute.Name),
-                                                    PLCTag = PLCTags.GetSyncFromDB(Cont.PLCTag),
-                                                    PLCTagID = PLCTags.GetID(Cont.PLCTag.Name),
+                                                    PLCTag = Cont.PLCTag != null ? PLCTags.GetSyncFromDB(Cont.PLCTag) : null,
+                                                    PLCTagID = Cont.PLCTag != null ? PLCTags.GetID(Cont.PLCTag.Name) : Cont.PLCTagID,
                                                     IOTag = IOTags.GetSyncFromDB(Cont.IOTag),
                                                     IOTagID = IOTags.GetID(Cont.IOTag.Name)
                                                 }).ToList();

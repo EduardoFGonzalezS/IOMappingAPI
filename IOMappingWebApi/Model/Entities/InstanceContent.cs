@@ -20,7 +20,7 @@ namespace IOMappingWebApi.Model
         [XmlIgnore()]
         public int IOTagID { get; set; }
         [XmlIgnore()]
-        public int PLCTagID { get; set; }
+        public int? PLCTagID { get; set; }
 
         //Navigation Properties
         [XmlElement("Instance")]
