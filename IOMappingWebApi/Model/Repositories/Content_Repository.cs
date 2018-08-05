@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace IOMappingWebApi.Model
 {
-    public interface IContent_Repository //: IRecordRepository<InstanceContent>
+    public interface IContent_Repository
     {
         List<InstanceContent> EntityCollection { get; set; }
         void Insert(InstanceContent Entity);
@@ -14,17 +14,36 @@ namespace IOMappingWebApi.Model
         int GetID(String InstanceName, String AttributeName);
         List<InstanceContent> SurplusInDatabase(List<InstanceContent> _Contents);
         void DeleteList(List<InstanceContent> Entities);
+        List<InstanceContent> GetListSyncFromDB(List<InstanceContent> _Entities);
+        GalaxyObjectContext context { get; set; }
+
+        IAttribute_Repository Attributes { get; }
+        IIOTag_Repository IOTags { get; }
+        IPLCTag_Repository PLCTags { get; }
+        IInstance_Repository Instances { get; }
     }
 
     public class Content_Repository : IContent_Repository
     {
         // #01 - Fields
-        private GalaxyObjectContext context;
+        public IInstance_Repository Instances { get; private set; }
+        public IAttribute_Repository Attributes { get; private set; }
+        public IIOTag_Repository IOTags { get; private set; }
+        public IPLCTag_Repository PLCTags { get; private set; }
 
-        // #02 - Constructors
-        public Content_Repository(GalaxyObjectContext ctx)
+        public GalaxyObjectContext context { get; set; }
+
+        // #02 - Constructos
+        public Content_Repository(GalaxyObjectContext ctx
+            , IInstance_Repository _Instances
+            , IAttribute_Repository _Attributes
+            , IIOTag_Repository _IOTags
+            , IPLCTag_Repository _PLCTags)
         {
-            context = ctx;
+            Instances = _Instances;
+            Attributes = _Attributes;
+            IOTags = _IOTags;
+            PLCTags = _PLCTags;
         }
 
         // #03 - Properties
@@ -189,6 +208,24 @@ namespace IOMappingWebApi.Model
                 if (FoundEntity != null && FoundEntity != Entity)
                 { context.Entry(FoundEntity).CurrentValues.SetValues(Entity); }
             }
+        }
+
+        public List<InstanceContent> GetListSyncFromDB(List<InstanceContent> _Entities)
+        {
+            List<InstanceContent> UpdatedList = (from Cont in _Entities
+                                                select new InstanceContent()
+                                                {
+                                                    InstanceContentID = GetID(Cont.Instance.Name, Cont.Attribute.Name),
+                                                    Instance = Instances.GetSyncFromDB(Cont.Instance),
+                                                    InstanceID = Instances.GetID(Cont.Instance.Name),
+                                                    Attribute = Attributes.GetSyncFromDB(Cont.Attribute),
+                                                    AttributeID = Attributes.GetID(Cont.Attribute.Name),
+                                                    PLCTag = PLCTags.GetSyncFromDB(Cont.PLCTag),
+                                                    PLCTagID = PLCTags.GetID(Cont.PLCTag.Name),
+                                                    IOTag = IOTags.GetSyncFromDB(Cont.IOTag),
+                                                    IOTagID = IOTags.GetID(Cont.IOTag.Name)
+                                                }).ToList();
+            return UpdatedList;
         }
 
         public void DeleteList(List<InstanceContent> Entities)

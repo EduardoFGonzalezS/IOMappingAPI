@@ -56,6 +56,23 @@ namespace IOMappingWebApi
                 //    RelationalEventId.QueryClientEvaluationWarning));
             });
 
+            //services.AddScoped<IContent_Repository, Content_Repository>
+            //    (typeof(GalaxyObjectContext),
+            //    typeof(IInstance_Repository),
+            //    typeof(IAttribute_Repository),
+            //    typeof(IIOTag_Repository),
+            //    typeof(IPLCTag_Repository)
+            //    );
+
+
+
+            //services.AddScoped<IGalaxyObject_UoW>(s => new GalaxyObject_UoW(new GalaxyObjectContext())
+            //{
+            //    Instances = new Instance_Repository();
+
+            //});
+
+
             services.AddScoped<IContent_Repository, Content_Repository>();
             services.AddScoped<IAttribute_Repository, Attribute_Repository>();
             services.AddScoped<IInstance_Repository, Instance_Repository>();

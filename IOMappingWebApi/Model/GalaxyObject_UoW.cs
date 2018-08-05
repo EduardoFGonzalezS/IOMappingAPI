@@ -16,11 +16,6 @@ namespace IOMappingWebApi.Model
         /// </summary>
         /// <returns>The number of objects in an Added, Modified, or Deleted state</returns>
         Task Commit();
-
-        IAttribute_Repository Attributes { get; }
-        IIOTag_Repository IOTags { get; }
-        IPLCTag_Repository PLCTags { get; }
-        IInstance_Repository Instances { get; }
         IContent_Repository Contents { get; }
         IPLC_Repository PLCs { get; }
         Task<HttpResponseMessage> PushRecordsToDbset(List<InstanceContent> Contents_ToPush);
@@ -35,11 +30,6 @@ namespace IOMappingWebApi.Model
         /// The DbContext
         /// </summary>
         private GalaxyObjectContext context;
-
-        public IAttribute_Repository Attributes { get; private set; }
-        public IIOTag_Repository IOTags { get; private set; }
-        public IPLCTag_Repository PLCTags { get; private set; }
-        public IInstance_Repository Instances { get; private set; }
         public IContent_Repository Contents { get; private set; }
         public IPLC_Repository PLCs { get; private set; }
 
@@ -47,15 +37,11 @@ namespace IOMappingWebApi.Model
         /// Initializes a new instance of the UnitOfWork class.
         /// </summary>
         /// <param name="context">The object context</param>
-        public GalaxyObject_UoW(GalaxyObjectContext ctx)
+        public GalaxyObject_UoW(GalaxyObjectContext ctx , IContent_Repository _conts)
         {
             context = ctx;
             PLCs = new PLC_Repository(context);
-            Attributes = new Attribute_Repository(context);
-            PLCTags = new PLCTag_Repository(context, PLCs);
-            IOTags = new IOTag_Repository(context, PLCs);
-            Contents = new Content_Repository(context);
-            Instances = new Instance_Repository(context);
+            Contents = _conts; Contents.context = ctx;
         }
 
         /// <summary>
@@ -77,6 +63,7 @@ namespace IOMappingWebApi.Model
                                 .Where(vPLC => vPLC != null)
                                 .GroupBy(vPLC => vPLC.Name)
                                 .Select(vPLC => vPLC.First()).ToList();
+
             PLCs.PushToDbset(PLCs_ToPush);
 
             //03 - SAVE THE DB CONTEXT ########  
@@ -90,17 +77,17 @@ namespace IOMappingWebApi.Model
             List<PLCTag> PLCTags_ToPush = _Contents.Select(c => c.PLCTag).ToList();
 
             //05 - Push individual entities to Database.
-            Attributes.PushToDbset(Attributes_ToPush);
-            Instances.PushToDbset(Instances_ToPush);
-            IOTags.PushToDbset(IOTags_ToPush);
-            PLCTags.PushToDbset(PLCTags_ToPush);
+            Contents.Attributes.PushToDbset(Attributes_ToPush);
+            Contents.Instances.PushToDbset(Instances_ToPush);
+            Contents.IOTags.PushToDbset(IOTags_ToPush);
+            Contents.PLCTags.PushToDbset(PLCTags_ToPush);
 
             //06 - SAVE THE DB CONTEXT ########  
             context.SaveChanges();
 
             //07 - Update the Primary Keys on all entities on the contents collection. This info is extracted from the database.
             // After that, push to database.
-            List<InstanceContent> PContents = FetchIds(_Contents);
+            List<InstanceContent> PContents = Contents.GetListSyncFromDB(_Contents);
             Contents.PushToDbset(PContents);
 
             //09 - SAVE THE DB CONTEXT ########
@@ -114,25 +101,6 @@ namespace IOMappingWebApi.Model
             response = new HttpResponseMessage(HttpStatusCode.OK);
             return response;
         }
-
-        private List<InstanceContent> FetchIds(List<InstanceContent> _ContentList)
-        {
-            List<InstanceContent> ReturnList = (from Cont in _ContentList
-                                                select new InstanceContent()
-                                                {
-                                                    InstanceContentID = Contents.GetID(Cont.Instance.Name, Cont.Attribute.Name),
-                                                    Instance = Instances.GetSyncFromDB(Cont.Instance),
-                                                    InstanceID = Instances.GetID(Cont.Instance.Name),
-                                                    Attribute = Attributes.GetSyncFromDB(Cont.Attribute),
-                                                    AttributeID = Attributes.GetID(Cont.Attribute.Name),
-                                                    PLCTag = PLCTags.GetSyncFromDB(Cont.PLCTag),
-                                                    PLCTagID = PLCTags.GetID(Cont.PLCTag.Name),
-                                                    IOTag = IOTags.GetSyncFromDB(Cont.IOTag),
-                                                    IOTagID = IOTags.GetID(Cont.IOTag.Name)
-                                                }).ToList();
-            return ReturnList;
-        }
-
 
         /// <summary>
         /// Saves all pending changes

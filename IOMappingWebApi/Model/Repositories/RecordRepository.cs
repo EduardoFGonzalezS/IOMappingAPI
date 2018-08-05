@@ -15,12 +15,13 @@ namespace IOMappingWebApi.Model
         int GetID(String Name);
         List<TEntity> GetListSyncFromDB(List<TEntity> _Entities);
         TEntity GetSyncFromDB(TEntity _Entity);
+        GalaxyObjectContext context { get; set; }
     }
 
     public abstract class RecordRepository<TEntity> where TEntity : class, ISimpleRecord, new()
     {
         // #01 - Fields
-        protected GalaxyObjectContext context;
+        public GalaxyObjectContext context { get; set; }
 
         // #02 - Constructors
         public RecordRepository(GalaxyObjectContext ctx)
