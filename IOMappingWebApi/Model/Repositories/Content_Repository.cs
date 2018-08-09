@@ -16,6 +16,10 @@ namespace IOMappingWebApi.Model
         void DeleteList(List<InstanceContent> Entities);
         List<InstanceContent> GetListSyncFromDB(List<InstanceContent> _Entities);
         GalaxyObjectContext context { get; set; }
+        List<InstanceContent> NOTInDatabase(List<InstanceContent> Entities);
+        void InsertList(List<InstanceContent> Entities);
+        List<InstanceContent> InDatabase(List<InstanceContent> Entities);
+        void UpdateList(List<InstanceContent> Entities);
 
         IAttribute_Repository Attributes { get; }
         IIOTag_Repository IOTags { get; }
@@ -248,6 +252,22 @@ namespace IOMappingWebApi.Model
                                                     IOTag = IOTags.GetSyncFromDB(Cont.IOTag),
                                                     IOTagID = IOTags.GetID(Cont.IOTag.Name)
                                                 }).ToList();
+                                                //select new InstanceContent()
+                                                //{
+                                                //    InstanceContentID = GetID(Cont.Instance.Name, Cont.Attribute.Name),
+                                                //    Instance = Instances.GetSyncFromDB(Cont.Instance),
+                                                //    InstanceID = Instances.GetID(Cont.Instance.Name),
+                                                //    Attribute = Attributes.GetSyncFromDB(Cont.Attribute),
+                                                //    AttributeID = Attributes.GetID(Cont.Attribute.Name),
+                                                //    PLCTag = Cont.PLCTag != null ? PLCTags.GetSyncFromDB(Cont.PLCTag) :
+                                                //    EntityCollection.Where(EC => EC.InstanceContentID == GetID(Cont.Instance.Name, Cont.Attribute.Name))
+                                                //                    .Select(EC => EC.PLCTag).FirstOrDefault(),
+                                                //    PLCTagID = Cont.PLCTag != null ? PLCTags.GetID(Cont.PLCTag.Name) :
+                                                //    EntityCollection.Where(EC => EC.InstanceContentID == GetID(Cont.Instance.Name, Cont.Attribute.Name))
+                                                //                    .Select(EC => EC.PLCTag.ID).FirstOrDefault(),
+                                                //    IOTag = IOTags.GetSyncFromDB(Cont.IOTag),
+                                                //    IOTagID = IOTags.GetID(Cont.IOTag.Name)
+                                                //}).ToList();
             return UpdatedList;
         }
 

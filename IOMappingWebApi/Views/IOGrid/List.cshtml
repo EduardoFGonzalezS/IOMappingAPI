@@ -141,34 +141,11 @@
                 toolbar: {
                     items: [
                         {
-                            type: 'button', icon: 'ui-icon-plus', label: 'Add Line', listener:
-                                {
-                                    "click": function (evt, ui) {
-                                        //append empty row at the end.
-                                        var rowData = { ProductID: 34, UnitPrice: 0.2 }; //empty row
-                    var rowIndx = $grid.pqGrid("addRow", { rowData: rowData, checkEditable: true });
-                                        $grid.pqGrid("goToPage", { rowIndx: rowIndx });
-                                        $grid.pqGrid("editFirstCellInRow", { rowIndx: rowIndx });
-                                    }
-                                }
-                        },
-                        { type: 'separator' },
-                        {
                             type: 'button', icon: 'ui-icon-disk', label: 'Save Changes', cls: 'changes', listener:
                                 {
                                     "click": function (evt, ui) {
-                        saveChanges();
-                    }
-                                },
-                            options: { disabled: true }
-                        },
-                        {
-                            type: 'button', icon: 'ui-icon-cancel', label: 'Reject Changes', cls: 'changes', listener:
-                                {
-                                    "click": function (evt, ui) {
-                                        $grid.pqGrid("rollback");
-                                        $grid.pqGrid("history", { method: 'resetUndo' });
-                    }
+                                        saveChanges();
+                                    }
                                 },
                             options: { disabled: true }
                         },
@@ -182,6 +159,7 @@
                                 },
                             options: { disabled: true }
                         },
+                        { type: 'separator' },
                         {
                             type: 'button', icon: 'ui-icon-arrowrefresh-1-s', label: 'Redo', listener:
                                 {

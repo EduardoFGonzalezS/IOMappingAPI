@@ -66,7 +66,57 @@ namespace IOMappingWebApi.Controllers
             HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.BadRequest);
             response.ReasonPhrase = "Request did not initialize";
 
-            Contents.PushToDbset(vContents);
+            //Contents.PushToDbset(vContents); Maybe To be Used Later!!!!
+
+            //Extract Contained Classes, and push them to the database
+            List<Model.Attribute> Attributes_ToPush = vContents.Select(c => c.Attribute).ToList();
+            List<Model.Instance> Instances_ToPush = vContents.Select(c => c.Instance).ToList();
+            List<Model.IOTag> IOTags_ToPush = vContents.Select(c => c.IOTag).ToList();
+
+            Contents.Attributes.PushToDbset(Attributes_ToPush);
+            Contents.Instances.PushToDbset(Instances_ToPush);
+            Contents.IOTags.PushToDbset(IOTags_ToPush);
+            Contents.context.SaveChanges();
+
+            //Update the contained classes in the entities, so that they are not null or incomplete
+            //List<InstanceContent> EntsToPush = Contents.GetListSyncFromDB(vContents);
+
+            List<InstanceContent> EntsToPush = (from Cont in vContents
+                                                select new InstanceContent()
+                                                 {
+                                                     InstanceContentID = Contents.GetID(Cont.Instance.Name, Cont.Attribute.Name),
+                                                     Instance = Contents.Instances.GetSyncFromDB(Cont.Instance),
+                                                     InstanceID = Contents.Instances.GetID(Cont.Instance.Name),
+                                                     Attribute = Contents.Attributes.GetSyncFromDB(Cont.Attribute),
+                                                     AttributeID = Contents.Attributes.GetID(Cont.Attribute.Name),
+                                                     PLCTag = Contents.EntityCollection
+                                                                        .Where(EC => EC.InstanceContentID == Contents.GetID(Cont.Instance.Name, Cont.Attribute.Name))
+                                                                        .Select(EC => EC.PLCTag).FirstOrDefault(),
+                                                     PLCTagID = Contents.EntityCollection
+                                                                        .Where(EC => EC.InstanceContentID == Contents.GetID(Cont.Instance.Name, Cont.Attribute.Name))
+                                                                        .Select(EC => EC.PLCTagID).FirstOrDefault(),
+                                                     IOTag = Contents.IOTags.GetSyncFromDB(Cont.IOTag),
+                                                     IOTagID = Contents.IOTags.GetID(Cont.IOTag.Name)
+                                                 }).ToList();
+
+
+            //foreach (InstanceContent Cont in EntsToPush)
+            //{
+            //    if(Cont.PLCTag == null) { 
+            //        Contents.context.Entry(Cont).Property(x => x.PLCTag).IsModified = false;
+            //        Cont.PLCTagID = null;
+            //    }
+            //}
+
+            //Find contents that as NOT in the database, and insert them
+            List<InstanceContent> Entities_NOTinDb = Contents.NOTInDatabase(EntsToPush);
+            if (Entities_NOTinDb.Count  > 0) { Contents.InsertList(Entities_NOTinDb); }
+
+            //Find contents that are in the database, and update them
+            List<InstanceContent> Entities_inDb = Contents.InDatabase(EntsToPush);
+            if (Entities_inDb.Count > 0) { Contents.UpdateList(Entities_inDb); }
+
+            //----------------------------------------------------------------------------
 
             Contents.context.SaveChanges();
             //HttpResponseMessage Response = await Contents.PushToDbset(vContents);
@@ -79,6 +129,69 @@ namespace IOMappingWebApi.Controllers
             response = new HttpResponseMessage(HttpStatusCode.OK);
             return response;
         }
+
+        // POST api/Object/FromDI/'Serialized Object'
+        //[Route("api/object/PostFromDI")]
+        //[HttpPost]
+        //public async Task<HttpResponseMessage> PostFromDI([FromBody] GalaxyObjects request)
+        //{
+        //    GalaxyObjects GObjcts = request;
+        //    List<InstanceContent> vContents = GObjcts.List;
+
+        //    HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.BadRequest);
+        //    response.ReasonPhrase = "Request did not initialize";
+
+        //    //Extract Contained Classes, and push them to the database
+        //    List<Model.Attribute> Attributes_ToPush = vContents.Select(c => c.Attribute).ToList();
+        //    Contents.Attributes.PushToDbset(Attributes_ToPush);
+
+        //    List<Model.Instance> Instances_ToPush = vContents.Select(c => c.Instance).ToList();
+        //    Contents.Instances.PushToDbset(Instances_ToPush);
+
+        //    List<Model.IOTag> IOTags_ToPush = vContents.Select(c => c.IOTag).ToList();
+        //    Contents.IOTags.PushToDbset(IOTags_ToPush);
+
+        //    Contents.context.SaveChanges();
+
+        //    //Update the contained classes in the entities, so that they are not null or incomplete
+        //    List<InstanceContent> EntsToPush = (from Cont in vContents
+        //                                        select new InstanceContent()
+        //                                        {
+        //                                            InstanceContentID = Contents.GetID(Cont.Instance.Name, Cont.Attribute.Name),
+        //                                            Instance = Contents.Instances.GetSyncFromDB(Cont.Instance),
+        //                                            InstanceID = Contents.Instances.GetID(Cont.Instance.Name),
+        //                                            Attribute = Contents.Attributes.GetSyncFromDB(Cont.Attribute),
+        //                                            AttributeID = Contents.Attributes.GetID(Cont.Attribute.Name),
+        //                                            IOTag = Contents.IOTags.GetSyncFromDB(Cont.IOTag),
+        //                                            IOTagID = Contents.IOTags.GetID(Cont.IOTag.Name)
+        //                                        }).ToList();
+
+        //    foreach (InstanceContent Cont in EntsToPush)
+        //    {
+        //        Contents.context.Entry(Cont).Property(x => x.PLCTag).IsModified = false;
+
+        //    }
+
+        //    //Find contents that as NOT in the database, and insert them
+        //    List<InstanceContent> Entities_NOTinDb = Contents.NOTInDatabase(EntsToPush);
+        //    if (Entities_NOTinDb.Count > 0) { Contents.InsertList(Entities_NOTinDb); }
+
+        //    //Find contents that are in the database, and update them
+        //    List<InstanceContent> Entities_inDb = Contents.InDatabase(EntsToPush);
+        //    if (Entities_inDb.Count > 0) { Contents.UpdateList(Entities_inDb); }
+        //    //----------------------------------------------------------------------------
+
+        //    Contents.context.SaveChanges();
+        //    //HttpResponseMessage Response = await Contents.PushToDbset(vContents);
+
+        //    //EXTRA - For future use
+        //    //List<InstanceContent> Surplus = Contents.SurplusInDatabase(PContents);
+        //    //Contents.DeleteList(Surplus);
+        //    //context.SaveChanges();
+
+        //    response = new HttpResponseMessage(HttpStatusCode.OK);
+        //    return response;
+        //}
 
         // PUT api/values/5
         [HttpPut("{id}")]
