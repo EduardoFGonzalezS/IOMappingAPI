@@ -155,20 +155,24 @@ namespace IOMappingWebApi.Model
                            into DbResults
                            where !DbResults.Any()
                            select ents).ToList();
-            int a = 0;
             return (List<InstanceContent>)Results;
         }
 
         public List<InstanceContent> SurplusInDatabase(List<InstanceContent> _Contents)
         {
             String InstanceName = _Contents.Select(c => c.Instance.Name).FirstOrDefault();
-            var Surplus = EntityCollection
-                .Where(conts => !_Contents.Any(ec => (
-                ec.Attribute.ID == conts.Attribute.ID 
-                && ec.Instance.ID == conts.Instance.ID
-                && ec.IOTag.ID == conts.IOTag.ID 
-                && ec.PLCTag.ID == conts.PLCTag.ID))
-                && conts.Instance.Name == InstanceName);
+
+            var Surplus = (from conts in EntityCollection
+                           where !_Contents.Any(db => conts.Attribute.ID == db.Attribute.ID
+                                                   && conts.Instance.ID == db.Instance.ID
+                                                   && conts.IOTag.ID == db.IOTag.ID)
+                           select conts);
+
+
+            //var Surplus = EntityCollection
+            //    .Where(conts => !_Contents.Any(ec => 
+            //    ec.Attribute.ID == conts.Attribute.ID && ec.Instance.ID == conts.Instance.ID && ec.IOTag.ID == conts.IOTag.ID)
+            //    && conts.Instance.Name == InstanceName);
 
             return Surplus.ToList();
         }
@@ -252,22 +256,6 @@ namespace IOMappingWebApi.Model
                                                     IOTag = IOTags.GetSyncFromDB(Cont.IOTag),
                                                     IOTagID = IOTags.GetID(Cont.IOTag.Name)
                                                 }).ToList();
-                                                //select new InstanceContent()
-                                                //{
-                                                //    InstanceContentID = GetID(Cont.Instance.Name, Cont.Attribute.Name),
-                                                //    Instance = Instances.GetSyncFromDB(Cont.Instance),
-                                                //    InstanceID = Instances.GetID(Cont.Instance.Name),
-                                                //    Attribute = Attributes.GetSyncFromDB(Cont.Attribute),
-                                                //    AttributeID = Attributes.GetID(Cont.Attribute.Name),
-                                                //    PLCTag = Cont.PLCTag != null ? PLCTags.GetSyncFromDB(Cont.PLCTag) :
-                                                //    EntityCollection.Where(EC => EC.InstanceContentID == GetID(Cont.Instance.Name, Cont.Attribute.Name))
-                                                //                    .Select(EC => EC.PLCTag).FirstOrDefault(),
-                                                //    PLCTagID = Cont.PLCTag != null ? PLCTags.GetID(Cont.PLCTag.Name) :
-                                                //    EntityCollection.Where(EC => EC.InstanceContentID == GetID(Cont.Instance.Name, Cont.Attribute.Name))
-                                                //                    .Select(EC => EC.PLCTag.ID).FirstOrDefault(),
-                                                //    IOTag = IOTags.GetSyncFromDB(Cont.IOTag),
-                                                //    IOTagID = IOTags.GetID(Cont.IOTag.Name)
-                                                //}).ToList();
             return UpdatedList;
         }
 

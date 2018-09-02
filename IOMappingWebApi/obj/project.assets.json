@@ -26960,7 +26960,7 @@
       ]
     },
     "System.Xml.XmlDocument/4.3.0": {
-      "sha512": "s5+XT3N+GVUyaO1ub2tncPGtkHooVJOTkVI1VQX6jk94yPFNSZ8nFHjhFHbF1GV9oNQkL/6EjdFgjzVfSBzUnw==",
+      "sha512": "lJ8AxvkX7GQxpC6GFCeBj8ThYVyQczx2+f/cWHJU8tjS7YfI6Cv6bon70jVEgs2CiFbmmM8b9j1oZVx0dSI2Ww==",
       "type": "package",
       "path": "system.xml.xmldocument/4.3.0",
       "files": [
@@ -26997,7 +26997,7 @@
       ]
     },
     "System.Xml.XmlSerializer/4.3.0": {
-      "sha512": "BBsvi/EK3K7nLJ9MSCzjsyjX8vTkvKPONxPRACaDGrOERkRAOhE7CgU2De4tU/3SntGp83DB3TsXGtAppem61Q==",
+      "sha512": "MYoTCP7EZ98RrANESW05J5ZwskKDoN0AuZ06ZflnowE50LTpbR5yRg3tHckTVm5j/m47stuGgCrCHWePyHS70Q==",
       "type": "package",
       "path": "system.xml.xmlserializer/4.3.0",
       "files": [
@@ -27162,11 +27162,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\egonzalez\\Documents\\04 - Visual Studio 2017 Projects\\IOMappingWebApi\\IOMappingWebApi\\IOMappingWebApi.csproj",
+      "projectUniqueName": "D:\\11 - Visual Studio Repositories\\IOMappingAPI\\IOMappingWebApi\\IOMappingWebApi.csproj",
       "projectName": "IOMappingWebApi",
-      "projectPath": "C:\\Users\\egonzalez\\Documents\\04 - Visual Studio 2017 Projects\\IOMappingWebApi\\IOMappingWebApi\\IOMappingWebApi.csproj",
+      "projectPath": "D:\\11 - Visual Studio Repositories\\IOMappingAPI\\IOMappingWebApi\\IOMappingWebApi.csproj",
       "packagesPath": "C:\\Users\\egonzalez\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\egonzalez\\Documents\\04 - Visual Studio 2017 Projects\\IOMappingWebApi\\IOMappingWebApi\\obj\\",
+      "outputPath": "D:\\11 - Visual Studio Repositories\\IOMappingAPI\\IOMappingWebApi\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\egonzalez\\AppData\\Roaming\\NuGet\\NuGet.Config",

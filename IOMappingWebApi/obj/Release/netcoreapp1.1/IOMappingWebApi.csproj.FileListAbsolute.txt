@@ -9,3 +9,14 @@ C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IO
 C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi\obj\Release\netcoreapp1.1\IOMappingWebApi.AssemblyInfo.cs
 C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi\obj\Release\netcoreapp1.1\IOMappingWebApi.dll
 C:\Users\egonzalez\Documents\04 - Visual Studio 2017 Projects\IOMappingWebApi\IOMappingWebApi\obj\Release\netcoreapp1.1\IOMappingWebApi.pdb
+D:\11 - Visual Studio Repositories\IOMappingAPI\IOMappingWebApi\bin\Release\netcoreapp1.1\IOMappingWebApi.deps.json
+D:\11 - Visual Studio Repositories\IOMappingAPI\IOMappingWebApi\bin\Release\netcoreapp1.1\IOMappingWebApi.runtimeconfig.json
+D:\11 - Visual Studio Repositories\IOMappingAPI\IOMappingWebApi\bin\Release\netcoreapp1.1\IOMappingWebApi.runtimeconfig.dev.json
+D:\11 - Visual Studio Repositories\IOMappingAPI\IOMappingWebApi\bin\Release\netcoreapp1.1\IOMappingWebApi.dll
+D:\11 - Visual Studio Repositories\IOMappingAPI\IOMappingWebApi\bin\Release\netcoreapp1.1\IOMappingWebApi.pdb
+D:\11 - Visual Studio Repositories\IOMappingAPI\IOMappingWebApi\obj\Release\netcoreapp1.1\IOMappingWebApi.csprojAssemblyReference.cache
+D:\11 - Visual Studio Repositories\IOMappingAPI\IOMappingWebApi\obj\Release\netcoreapp1.1\IOMappingWebApi.csproj.CoreCompileInputs.cache
+D:\11 - Visual Studio Repositories\IOMappingAPI\IOMappingWebApi\obj\Release\netcoreapp1.1\IOMappingWebApi.AssemblyInfoInputs.cache
+D:\11 - Visual Studio Repositories\IOMappingAPI\IOMappingWebApi\obj\Release\netcoreapp1.1\IOMappingWebApi.AssemblyInfo.cs
+D:\11 - Visual Studio Repositories\IOMappingAPI\IOMappingWebApi\obj\Release\netcoreapp1.1\IOMappingWebApi.dll
+D:\11 - Visual Studio Repositories\IOMappingAPI\IOMappingWebApi\obj\Release\netcoreapp1.1\IOMappingWebApi.pdb
