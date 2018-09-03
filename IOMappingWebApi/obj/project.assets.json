@@ -148,7 +148,7 @@
           "lib/netstandard1.3/Microsoft.AspNetCore.Cors.dll": {}
         }
       },
-      "Microsoft.AspNetCore.Cryptography.Internal/1.1.2": {
+      "Microsoft.AspNetCore.Cryptography.Internal/1.1.3": {
         "type": "package",
         "dependencies": {
           "NETStandard.Library": "1.6.1"
@@ -160,12 +160,12 @@
           "lib/netstandard1.3/Microsoft.AspNetCore.Cryptography.Internal.dll": {}
         }
       },
-      "Microsoft.AspNetCore.DataProtection/1.1.2": {
+      "Microsoft.AspNetCore.DataProtection/1.1.3": {
         "type": "package",
         "dependencies": {
-          "Microsoft.AspNetCore.Cryptography.Internal": "1.1.2",
-          "Microsoft.AspNetCore.DataProtection.Abstractions": "1.1.2",
-          "Microsoft.AspNetCore.Hosting.Abstractions": "1.1.2",
+          "Microsoft.AspNetCore.Cryptography.Internal": "1.1.3",
+          "Microsoft.AspNetCore.DataProtection.Abstractions": "1.1.3",
+          "Microsoft.AspNetCore.Hosting.Abstractions": "1.1.3",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "1.1.1",
           "Microsoft.Extensions.Logging.Abstractions": "1.1.2",
           "Microsoft.Extensions.Options": "1.1.2",
@@ -181,7 +181,7 @@
           "lib/netstandard1.3/Microsoft.AspNetCore.DataProtection.dll": {}
         }
       },
-      "Microsoft.AspNetCore.DataProtection.Abstractions/1.1.2": {
+      "Microsoft.AspNetCore.DataProtection.Abstractions/1.1.3": {
         "type": "package",
         "dependencies": {
           "NETStandard.Library": "1.6.1",
@@ -729,6 +729,23 @@
         },
         "runtime": {
           "lib/netstandard1.3/Microsoft.AspNetCore.Server.Kestrel.dll": {}
+        }
+      },
+      "Microsoft.AspNetCore.Session/1.1.3": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.DataProtection": "1.1.3",
+          "Microsoft.AspNetCore.Http.Abstractions": "1.1.2",
+          "Microsoft.Extensions.Caching.Abstractions": "1.1.2",
+          "Microsoft.Extensions.Logging.Abstractions": "1.1.2",
+          "Microsoft.Extensions.Options": "1.1.2",
+          "NETStandard.Library": "1.6.1"
+        },
+        "compile": {
+          "lib/netstandard1.3/Microsoft.AspNetCore.Session.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/Microsoft.AspNetCore.Session.dll": {}
         }
       },
       "Microsoft.AspNetCore.StaticFiles/1.1.1": {
@@ -3986,7 +4003,7 @@
           "lib/netstandard1.3/Microsoft.AspNetCore.Cors.dll": {}
         }
       },
-      "Microsoft.AspNetCore.Cryptography.Internal/1.1.2": {
+      "Microsoft.AspNetCore.Cryptography.Internal/1.1.3": {
         "type": "package",
         "dependencies": {
           "NETStandard.Library": "1.6.1"
@@ -3998,12 +4015,12 @@
           "lib/netstandard1.3/Microsoft.AspNetCore.Cryptography.Internal.dll": {}
         }
       },
-      "Microsoft.AspNetCore.DataProtection/1.1.2": {
+      "Microsoft.AspNetCore.DataProtection/1.1.3": {
         "type": "package",
         "dependencies": {
-          "Microsoft.AspNetCore.Cryptography.Internal": "1.1.2",
-          "Microsoft.AspNetCore.DataProtection.Abstractions": "1.1.2",
-          "Microsoft.AspNetCore.Hosting.Abstractions": "1.1.2",
+          "Microsoft.AspNetCore.Cryptography.Internal": "1.1.3",
+          "Microsoft.AspNetCore.DataProtection.Abstractions": "1.1.3",
+          "Microsoft.AspNetCore.Hosting.Abstractions": "1.1.3",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "1.1.1",
           "Microsoft.Extensions.Logging.Abstractions": "1.1.2",
           "Microsoft.Extensions.Options": "1.1.2",
@@ -4019,7 +4036,7 @@
           "lib/netstandard1.3/Microsoft.AspNetCore.DataProtection.dll": {}
         }
       },
-      "Microsoft.AspNetCore.DataProtection.Abstractions/1.1.2": {
+      "Microsoft.AspNetCore.DataProtection.Abstractions/1.1.3": {
         "type": "package",
         "dependencies": {
           "NETStandard.Library": "1.6.1",
@@ -4567,6 +4584,23 @@
         },
         "runtime": {
           "lib/netstandard1.3/Microsoft.AspNetCore.Server.Kestrel.dll": {}
+        }
+      },
+      "Microsoft.AspNetCore.Session/1.1.3": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.DataProtection": "1.1.3",
+          "Microsoft.AspNetCore.Http.Abstractions": "1.1.2",
+          "Microsoft.Extensions.Caching.Abstractions": "1.1.2",
+          "Microsoft.Extensions.Logging.Abstractions": "1.1.2",
+          "Microsoft.Extensions.Options": "1.1.2",
+          "NETStandard.Library": "1.6.1"
+        },
+        "compile": {
+          "lib/netstandard1.3/Microsoft.AspNetCore.Session.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/Microsoft.AspNetCore.Session.dll": {}
         }
       },
       "Microsoft.AspNetCore.StaticFiles/1.1.1": {
@@ -7953,7 +7987,7 @@
           "lib/netstandard1.3/Microsoft.AspNetCore.Cors.dll": {}
         }
       },
-      "Microsoft.AspNetCore.Cryptography.Internal/1.1.2": {
+      "Microsoft.AspNetCore.Cryptography.Internal/1.1.3": {
         "type": "package",
         "dependencies": {
           "NETStandard.Library": "1.6.1"
@@ -7965,12 +7999,12 @@
           "lib/netstandard1.3/Microsoft.AspNetCore.Cryptography.Internal.dll": {}
         }
       },
-      "Microsoft.AspNetCore.DataProtection/1.1.2": {
+      "Microsoft.AspNetCore.DataProtection/1.1.3": {
         "type": "package",
         "dependencies": {
-          "Microsoft.AspNetCore.Cryptography.Internal": "1.1.2",
-          "Microsoft.AspNetCore.DataProtection.Abstractions": "1.1.2",
-          "Microsoft.AspNetCore.Hosting.Abstractions": "1.1.2",
+          "Microsoft.AspNetCore.Cryptography.Internal": "1.1.3",
+          "Microsoft.AspNetCore.DataProtection.Abstractions": "1.1.3",
+          "Microsoft.AspNetCore.Hosting.Abstractions": "1.1.3",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "1.1.1",
           "Microsoft.Extensions.Logging.Abstractions": "1.1.2",
           "Microsoft.Extensions.Options": "1.1.2",
@@ -7986,7 +8020,7 @@
           "lib/netstandard1.3/Microsoft.AspNetCore.DataProtection.dll": {}
         }
       },
-      "Microsoft.AspNetCore.DataProtection.Abstractions/1.1.2": {
+      "Microsoft.AspNetCore.DataProtection.Abstractions/1.1.3": {
         "type": "package",
         "dependencies": {
           "NETStandard.Library": "1.6.1",
@@ -8534,6 +8568,23 @@
         },
         "runtime": {
           "lib/netstandard1.3/Microsoft.AspNetCore.Server.Kestrel.dll": {}
+        }
+      },
+      "Microsoft.AspNetCore.Session/1.1.3": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.DataProtection": "1.1.3",
+          "Microsoft.AspNetCore.Http.Abstractions": "1.1.2",
+          "Microsoft.Extensions.Caching.Abstractions": "1.1.2",
+          "Microsoft.Extensions.Logging.Abstractions": "1.1.2",
+          "Microsoft.Extensions.Options": "1.1.2",
+          "NETStandard.Library": "1.6.1"
+        },
+        "compile": {
+          "lib/netstandard1.3/Microsoft.AspNetCore.Session.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/Microsoft.AspNetCore.Session.dll": {}
         }
       },
       "Microsoft.AspNetCore.StaticFiles/1.1.1": {
@@ -11920,7 +11971,7 @@
           "lib/netstandard1.3/Microsoft.AspNetCore.Cors.dll": {}
         }
       },
-      "Microsoft.AspNetCore.Cryptography.Internal/1.1.2": {
+      "Microsoft.AspNetCore.Cryptography.Internal/1.1.3": {
         "type": "package",
         "dependencies": {
           "NETStandard.Library": "1.6.1"
@@ -11932,12 +11983,12 @@
           "lib/netstandard1.3/Microsoft.AspNetCore.Cryptography.Internal.dll": {}
         }
       },
-      "Microsoft.AspNetCore.DataProtection/1.1.2": {
+      "Microsoft.AspNetCore.DataProtection/1.1.3": {
         "type": "package",
         "dependencies": {
-          "Microsoft.AspNetCore.Cryptography.Internal": "1.1.2",
-          "Microsoft.AspNetCore.DataProtection.Abstractions": "1.1.2",
-          "Microsoft.AspNetCore.Hosting.Abstractions": "1.1.2",
+          "Microsoft.AspNetCore.Cryptography.Internal": "1.1.3",
+          "Microsoft.AspNetCore.DataProtection.Abstractions": "1.1.3",
+          "Microsoft.AspNetCore.Hosting.Abstractions": "1.1.3",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "1.1.1",
           "Microsoft.Extensions.Logging.Abstractions": "1.1.2",
           "Microsoft.Extensions.Options": "1.1.2",
@@ -11953,7 +12004,7 @@
           "lib/netstandard1.3/Microsoft.AspNetCore.DataProtection.dll": {}
         }
       },
-      "Microsoft.AspNetCore.DataProtection.Abstractions/1.1.2": {
+      "Microsoft.AspNetCore.DataProtection.Abstractions/1.1.3": {
         "type": "package",
         "dependencies": {
           "NETStandard.Library": "1.6.1",
@@ -12501,6 +12552,23 @@
         },
         "runtime": {
           "lib/netstandard1.3/Microsoft.AspNetCore.Server.Kestrel.dll": {}
+        }
+      },
+      "Microsoft.AspNetCore.Session/1.1.3": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.DataProtection": "1.1.3",
+          "Microsoft.AspNetCore.Http.Abstractions": "1.1.2",
+          "Microsoft.Extensions.Caching.Abstractions": "1.1.2",
+          "Microsoft.Extensions.Logging.Abstractions": "1.1.2",
+          "Microsoft.Extensions.Options": "1.1.2",
+          "NETStandard.Library": "1.6.1"
+        },
+        "compile": {
+          "lib/netstandard1.3/Microsoft.AspNetCore.Session.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/Microsoft.AspNetCore.Session.dll": {}
         }
       },
       "Microsoft.AspNetCore.StaticFiles/1.1.1": {
@@ -16018,7 +16086,7 @@
           "lib/netstandard1.3/Microsoft.AspNetCore.Cors.dll": {}
         }
       },
-      "Microsoft.AspNetCore.Cryptography.Internal/1.1.2": {
+      "Microsoft.AspNetCore.Cryptography.Internal/1.1.3": {
         "type": "package",
         "dependencies": {
           "NETStandard.Library": "1.6.1"
@@ -16030,12 +16098,12 @@
           "lib/netstandard1.3/Microsoft.AspNetCore.Cryptography.Internal.dll": {}
         }
       },
-      "Microsoft.AspNetCore.DataProtection/1.1.2": {
+      "Microsoft.AspNetCore.DataProtection/1.1.3": {
         "type": "package",
         "dependencies": {
-          "Microsoft.AspNetCore.Cryptography.Internal": "1.1.2",
-          "Microsoft.AspNetCore.DataProtection.Abstractions": "1.1.2",
-          "Microsoft.AspNetCore.Hosting.Abstractions": "1.1.2",
+          "Microsoft.AspNetCore.Cryptography.Internal": "1.1.3",
+          "Microsoft.AspNetCore.DataProtection.Abstractions": "1.1.3",
+          "Microsoft.AspNetCore.Hosting.Abstractions": "1.1.3",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "1.1.1",
           "Microsoft.Extensions.Logging.Abstractions": "1.1.2",
           "Microsoft.Extensions.Options": "1.1.2",
@@ -16051,7 +16119,7 @@
           "lib/netstandard1.3/Microsoft.AspNetCore.DataProtection.dll": {}
         }
       },
-      "Microsoft.AspNetCore.DataProtection.Abstractions/1.1.2": {
+      "Microsoft.AspNetCore.DataProtection.Abstractions/1.1.3": {
         "type": "package",
         "dependencies": {
           "NETStandard.Library": "1.6.1",
@@ -16599,6 +16667,23 @@
         },
         "runtime": {
           "lib/netstandard1.3/Microsoft.AspNetCore.Server.Kestrel.dll": {}
+        }
+      },
+      "Microsoft.AspNetCore.Session/1.1.3": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.DataProtection": "1.1.3",
+          "Microsoft.AspNetCore.Http.Abstractions": "1.1.2",
+          "Microsoft.Extensions.Caching.Abstractions": "1.1.2",
+          "Microsoft.Extensions.Logging.Abstractions": "1.1.2",
+          "Microsoft.Extensions.Options": "1.1.2",
+          "NETStandard.Library": "1.6.1"
+        },
+        "compile": {
+          "lib/netstandard1.3/Microsoft.AspNetCore.Session.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/Microsoft.AspNetCore.Session.dll": {}
         }
       },
       "Microsoft.AspNetCore.StaticFiles/1.1.1": {
@@ -19977,42 +20062,42 @@
         "microsoft.aspnetcore.cors.nuspec"
       ]
     },
-    "Microsoft.AspNetCore.Cryptography.Internal/1.1.2": {
-      "sha512": "DeDm7XO+/QVlxp+tefXbt2Mm10mw3BpUWvN9YVgl1Ykg08nBox95ZQ9EKLt/CpaANFGp//nJqpc93NTMKlwNnQ==",
+    "Microsoft.AspNetCore.Cryptography.Internal/1.1.3": {
+      "sha512": "ireGhyBUGTjb6he/uyV99kKGa2fb7l9QnxB4Vlg/7iNjWoZ5apNGwxH7DVbgQV3ixwfV2bKwOpUreMxJI6Xb9w==",
       "type": "package",
-      "path": "microsoft.aspnetcore.cryptography.internal/1.1.2",
+      "path": "microsoft.aspnetcore.cryptography.internal/1.1.3",
       "files": [
         "lib/net451/Microsoft.AspNetCore.Cryptography.Internal.dll",
         "lib/net451/Microsoft.AspNetCore.Cryptography.Internal.xml",
         "lib/netstandard1.3/Microsoft.AspNetCore.Cryptography.Internal.dll",
         "lib/netstandard1.3/Microsoft.AspNetCore.Cryptography.Internal.xml",
-        "microsoft.aspnetcore.cryptography.internal.1.1.2.nupkg.sha512",
+        "microsoft.aspnetcore.cryptography.internal.1.1.3.nupkg.sha512",
         "microsoft.aspnetcore.cryptography.internal.nuspec"
       ]
     },
-    "Microsoft.AspNetCore.DataProtection/1.1.2": {
-      "sha512": "QY8ufMUZItjfwAkcR/TcQBj2DWl+Z3N2ItNwdVFlAQMsPa24Ya9u/NmrlkJHZo29nk52EQbH/iaKfic+LG66RA==",
+    "Microsoft.AspNetCore.DataProtection/1.1.3": {
+      "sha512": "4am4PmrTDYexofUWxGdnyUItxPDLkhFUoY8JzPb4Cp3l8RCNs9e4WqLOynPLU/FZ3fJRdr+EJ6ub60LukHO7TA==",
       "type": "package",
-      "path": "microsoft.aspnetcore.dataprotection/1.1.2",
+      "path": "microsoft.aspnetcore.dataprotection/1.1.3",
       "files": [
         "lib/net451/Microsoft.AspNetCore.DataProtection.dll",
         "lib/net451/Microsoft.AspNetCore.DataProtection.xml",
         "lib/netstandard1.3/Microsoft.AspNetCore.DataProtection.dll",
         "lib/netstandard1.3/Microsoft.AspNetCore.DataProtection.xml",
-        "microsoft.aspnetcore.dataprotection.1.1.2.nupkg.sha512",
+        "microsoft.aspnetcore.dataprotection.1.1.3.nupkg.sha512",
         "microsoft.aspnetcore.dataprotection.nuspec"
       ]
     },
-    "Microsoft.AspNetCore.DataProtection.Abstractions/1.1.2": {
-      "sha512": "zknV0YBRRzqwOkxIetiV0rstv8xI1qZZ86hIeBw9eiQGP61hWfEoSPHS5y/Dk6+TDwtU6OjPbKqdEBXQj2jYQQ==",
+    "Microsoft.AspNetCore.DataProtection.Abstractions/1.1.3": {
+      "sha512": "bl3RN1XQcgx46mOzRaHA+pB+J35eH/P+SrCs5lG4vbk+B2TF1EeUvvRYPMr3QZpu32VyksKRDuF9HxmULFdV7A==",
       "type": "package",
-      "path": "microsoft.aspnetcore.dataprotection.abstractions/1.1.2",
+      "path": "microsoft.aspnetcore.dataprotection.abstractions/1.1.3",
       "files": [
         "lib/net451/Microsoft.AspNetCore.DataProtection.Abstractions.dll",
         "lib/net451/Microsoft.AspNetCore.DataProtection.Abstractions.xml",
         "lib/netstandard1.3/Microsoft.AspNetCore.DataProtection.Abstractions.dll",
         "lib/netstandard1.3/Microsoft.AspNetCore.DataProtection.Abstractions.xml",
-        "microsoft.aspnetcore.dataprotection.abstractions.1.1.2.nupkg.sha512",
+        "microsoft.aspnetcore.dataprotection.abstractions.1.1.3.nupkg.sha512",
         "microsoft.aspnetcore.dataprotection.abstractions.nuspec"
       ]
     },
@@ -20428,6 +20513,19 @@
         "lib/netstandard1.3/Microsoft.AspNetCore.Server.Kestrel.xml",
         "microsoft.aspnetcore.server.kestrel.1.1.3.nupkg.sha512",
         "microsoft.aspnetcore.server.kestrel.nuspec"
+      ]
+    },
+    "Microsoft.AspNetCore.Session/1.1.3": {
+      "sha512": "hVzfvxGqfNUL5vz7GgUVHyjVTMhukrKWt5GKcUfTuqs4uoDpbVuXc8WvL1bO6LR2lexn5KCMu7EPbNbIkEBc2w==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.session/1.1.3",
+      "files": [
+        "lib/net451/Microsoft.AspNetCore.Session.dll",
+        "lib/net451/Microsoft.AspNetCore.Session.xml",
+        "lib/netstandard1.3/Microsoft.AspNetCore.Session.dll",
+        "lib/netstandard1.3/Microsoft.AspNetCore.Session.xml",
+        "microsoft.aspnetcore.session.1.1.3.nupkg.sha512",
+        "microsoft.aspnetcore.session.nuspec"
       ]
     },
     "Microsoft.AspNetCore.StaticFiles/1.1.1": {
@@ -27147,6 +27245,7 @@
       "Microsoft.AspNetCore.Hosting >= 1.1.3",
       "Microsoft.AspNetCore.Mvc >= 1.1.3",
       "Microsoft.AspNetCore.Mvc.Razor >= 1.1.3",
+      "Microsoft.AspNetCore.Session >= 1.1.3",
       "Microsoft.AspNetCore.StaticFiles >= 1.1.1",
       "Microsoft.EntityFrameworkCore >= 1.1.5",
       "Microsoft.EntityFrameworkCore.SqlServer >= 1.1.5",
@@ -27211,6 +27310,10 @@
             "version": "[1.1.3, )"
           },
           "Microsoft.AspNetCore.Mvc.Razor": {
+            "target": "Package",
+            "version": "[1.1.3, )"
+          },
+          "Microsoft.AspNetCore.Session": {
             "target": "Package",
             "version": "[1.1.3, )"
           },

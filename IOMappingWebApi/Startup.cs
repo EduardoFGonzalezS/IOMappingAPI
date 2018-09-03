@@ -35,10 +35,20 @@ namespace IOMappingWebApi
             options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
 
+            // Add services needed for sessions
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(10);
+            });
+
+            // Add in-memory distributed cache
+            services.AddDistributedMemoryCache();
+
             services.AddDbContext<GalaxyObjectContext>(options =>
             {
                 options.UseSqlServer(Configuration["ConnectionString"],
                 
+
                 sqlServerOptionsAction: sqlOptions =>
                 {
                     sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
@@ -71,7 +81,7 @@ namespace IOMappingWebApi
             loggerFactory.AddDebug();
 
             app.UseMvc();
-
+            app.UseSession();
             app.UseDeveloperExceptionPage();
             app.UseStatusCodePages();
             app.UseStaticFiles();

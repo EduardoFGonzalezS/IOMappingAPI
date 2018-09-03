@@ -7,6 +7,9 @@ using IOMappingWebApi.Model;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.AspNetCore.Session;
+using Microsoft.AspNetCore.Http;
 
 namespace IOMappingWebApi.Controllers
 {
@@ -55,6 +58,39 @@ namespace IOMappingWebApi.Controllers
 
             response = new HttpResponseMessage(HttpStatusCode.OK);
             return response;
+        }
+
+        //[HttpPost, ValidateInput(false)]
+        [HttpPost]
+        public String excel(String extension, String excel)
+        {
+            if (extension != "csv" && extension != "xml")
+            {
+                throw new Exception("Unsupported extension");
+            }
+            String filename = "pqGrid." + extension;
+            HttpContext.Session.SetString("excel", excel);
+
+            return filename;
+        }
+
+        [HttpGet]
+        public FileContentResult excel(String filename)
+        {
+            String contents = HttpContext.Session.GetString("excel");
+
+            if (filename.EndsWith(".csv"))
+            {
+                return File(new System.Text.UTF8Encoding().GetBytes(contents), "text/csv", filename);
+            }
+            else if (filename.EndsWith(".xml"))
+            {
+                return File(new System.Text.UTF8Encoding().GetBytes(contents), "text/xml", filename);
+            }
+            else
+            {
+                throw new Exception("unknown extension");
+            }
         }
     }
 }
