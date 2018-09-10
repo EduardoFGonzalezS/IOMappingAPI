@@ -1,15 +1,54 @@
 ﻿@model List<IOMappingWebApi.Model.InstanceContent>
 @*<a id="refresh" href="#">Hello</a>*@
 
+
+@*<div id="myFilter" align="left" style=" border: 1px solid;padding:3px;height:50px;"></div>*@
+<div id="myFilter" align="left"></div>
 <div id="grid_editing" style="margin:25px;"></div>
 
 
 @section scripts
     {
 
+    @*Filtering Mechanism*@
+    <script type="text/javascript">
+        $(function () {
+            $("#myFilter").structFilter({
+                fields: [
+                    {
+                        id: "PLC", type: "list", label: "PLC",
+                        list: [
+                            { id: "1", label: "MT01" },
+                            { id: "2", label: "MT02" },
+                            { id: "3", label: "MT03" },
+                            { id: "4", label: "MT04" },
+                            { id: "5", label: "MT05" },
+                            { id: "5", label: "MT06" },
+                            { id: "5", label: "MT07" },
+                            { id: "5", label: "MT08" },
+                            { id: "5", label: "MT09" }
+                        ]
+                    },
+                    { id: "AutomationObject", type: "text", label: "AutomationObject" },
+                    { id: "AssetID", type: "text", label: "AssetID" }
+                ],
+                dateFormat: 'mm/dd/yy',
+                highlight: true,
+                buttonLabels: false,
+                submitButton: true,
+                submitReady: false
+            });
+        });
 
-@*Grid Initialization*@
-<script>
+        $("#myFilter").on("submit.search", function (event) {
+            var thedata = JSON.stringify($("#myFilter").structFilter("val"));
+            alert(thedata);
+        });
+    </script>
+
+
+    @*Grid Initialization*@
+    <script>
         $(function () {
             var data = [];
             @{ int indx = 0;}
@@ -18,14 +57,14 @@
 
             @foreach (var CL in Model)
             {
-                @:data[@indx] = { 'InstanceName': '@CL.Instance.Name', 'AttributeName': '@CL.Attribute.Name', 'WWPLC': '@CL.IOTag.PLC.Name', 'WWPLCTag': '@CL.IOTag.Name', 'PLC': '@CL.PLCTag.PLC.Name', 'PLCTag': '@CL.PLCTag.Name', 'Rack': @CL.PLCTag.Rack, 'Slot': @CL.PLCTag.Slot, 'Point': @CL.PLCTag.Point, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "WWPLC": "info-readonly", "WWPLCTag": "info-readonly"}  };
+                @:data[@indx] = { 'InstanceName': '@CL.Instance.Name', 'AttributeName': '@CL.Attribute.Name', 'WWPLC': '@CL.IOTag.PLC.Name', 'WWPLCTag': '@CL.IOTag.Name', 'AssetName': '@CL.AssetName', 'PLC': '@CL.PLCTag.PLC.Name', 'PLCTag': '@CL.PLCTag.Name', 'Rack': @CL.PLCTag.Rack, 'Slot': @CL.PLCTag.Slot, 'Point': @CL.PLCTag.Point, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "WWPLC": "info-readonly", "WWPLCTag": "info-readonly"}  };
                 indx++;
             }
             //called when save changes button is clicked.
             function saveChanges() {
                 var grid = $grid.pqGrid('getInstance').grid;
 
-                var datat = $("#grid_editing").pqGrid("getData", { dataIndx: ['InstanceName', 'AttributeName', 'WWPLC', 'WWPLCTag', 'PLC', 'PLCTag', 'Rack', 'Slot','Point'] });
+                var datat = $("#grid_editing").pqGrid("getData", { dataIndx: ['InstanceName', 'AttributeName', 'WWPLC', 'WWPLCTag', 'AssetName', 'PLC', 'PLCTag', 'Rack', 'Slot','Point'] });
                 var arrayLength = datat.length;
                 Postdata = [];
 
@@ -59,7 +98,8 @@
                                     Name: datat[i].PLC,
                                     ID: 0
                                 }
-                        }
+                        },
+                        AssetName : datat[i].AssetName
                     };
                 }
 
@@ -91,44 +131,6 @@
 
                 });
 
-                //if (isDirty) {
-                //    alert(JSON.stringify(Postdata));
-                //    //validate the new added rows.
-                //    var addList = grid.getChanges().addList;
-                    
-                //    //debugger;
-                //    for (var i = 0; i < addList.length; i++) {
-                //        var rowData = addList[i];
-                //        var isValid = grid.isValid({ "rowData": rowData }).valid;
-                //        if (!isValid) {
-                //            return;
-                //        }
-                //    }
-                //    var changes = grid.getChanges({ format: "byVal" });
-
-                //    //post changes to server
-                //    $.ajax({
-                //        dataType: "json",
-                //        type: "POST",
-                //        async: true,
-                //        beforeSend: function (jqXHR, settings) {
-                //            grid.showLoading();
-                //        },
-                //        url: "/IOGrid/Post", //for ASP.NET, java  -- var used to be changes   Url.Action("Post", "IOGrid", new { }, "http")   "/IOGrid/Post"
-                //        data: { list: JSON.stringify(Postdata) },
-                //        success: function (changes) {
-                //            //debugger;
-                //            grid.commit({ type: 'add', rows: changes.addList });
-                //            grid.commit({ type: 'update', rows: changes.updateList });
-                //            grid.commit({ type: 'delete', rows: changes.deleteList });
-                //            grid.history({ method: 'reset' });
-                //        },
-                //        complete: function () {
-                //            grid.hideLoading();
-                //        }
-
-                //    });
-                //}
             }
 
                 var obj = {
@@ -168,6 +170,17 @@
                     }
                                 },
                             options: { disabled: true }
+                        },
+                        { type: 'separator' },
+                        {
+                            type: 'button',
+                            label: "Export to Excel",
+                            icon: 'ui-icon-document',
+                            listeners: [{
+                                "click": function (evt) {
+                                    $("#grid_editing").pqGrid("exportExcel", { url: '@Url.Action("excel", "IOGrid", new {}, "http")', sheetName: "pqGrid sheet" });
+                                }
+                            }]
                         }
                     ]
                 },
@@ -202,10 +215,18 @@
                         title: "ATTRIBUTE", dataType: "string", align: "center", dataIndx: "AttributeName", editable: false, width: 120
                     },
                     {
-                        title: "WW PLC", dataType: "string", dataIndx: "WWPLC", align: "center", editable: false, width: 80
+                        title: "WW PLC", dataType: "string", dataIndx: "WWPLC", align: "center", editable: false, width: 80,
+                        filter: { type: 'textbox', condition: 'begin', listeners: ['keyup'] }
                     },
                     {
                         title: "WW PLC Tag", dataType: "string", dataIndx: "WWPLCTag", align: "center", editable: false, width: 80
+                    },
+                    {
+                        title: "Asset", width: 165, dataType: "string", align: "center", dataIndx: "AssetName", width: 80,
+                        validations: [
+                            { type: 'minLen', value: 1, msg: "Required" },
+                            { type: 'maxLen', value: 40, msg: "length should be <= 40" }
+                        ]
                     },
                     {
                         title: "PLC", width: 165, dataType: "string", align: "center", dataIndx: "PLC", width: 80,
@@ -261,10 +282,10 @@
 
             var $grid = $("#grid_editing").pqGrid(obj);
         });
-</script>
+    </script>
 
-@*Grid Refresh Button*@
-<script>
+    @*Grid Refresh Button*@
+    <script>
         $('#refresh').on('click', function () {
             $.ajax({
                 type: 'GET',

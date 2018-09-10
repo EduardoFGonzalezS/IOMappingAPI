@@ -21,6 +21,8 @@ namespace IOMappingWebApi.Model
         public int IOTagID { get; set; }
         [XmlIgnore()]
         public int? PLCTagID { get; set; }
+        [XmlElement("AssetName")]
+        public string AssetName { get; set; }
 
         //Navigation Properties
         [XmlElement("Instance")]
@@ -31,6 +33,7 @@ namespace IOMappingWebApi.Model
         public IOTag IOTag { get; set; }
         [XmlElement("PLCTag")]
         public PLCTag PLCTag { get; set; }
+
 
         public InstanceContent(string InstanceName, string AttributeName, string IOTagName, string PLCTagName) : this(InstanceName, AttributeName, IOTagName, PLCTagName,0,0,0)
         { }

@@ -57,14 +57,14 @@
 
             @foreach (var CL in Model)
             {
-                @:data[@indx] = { 'InstanceName': '@CL.Instance.Name', 'AttributeName': '@CL.Attribute.Name', 'WWPLC': '@CL.IOTag.PLC.Name', 'WWPLCTag': '@CL.IOTag.Name', 'PLC': '@CL.PLCTag.PLC.Name', 'PLCTag': '@CL.PLCTag.Name', 'Rack': @CL.PLCTag.Rack, 'Slot': @CL.PLCTag.Slot, 'Point': @CL.PLCTag.Point, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "WWPLC": "info-readonly", "WWPLCTag": "info-readonly"}  };
+                @:data[@indx] = { 'InstanceName': '@CL.Instance.Name', 'AttributeName': '@CL.Attribute.Name', 'WWPLC': '@CL.IOTag.PLC.Name', 'WWPLCTag': '@CL.IOTag.Name', 'AssetName': '@CL.AssetName', 'PLC': '@CL.PLCTag.PLC.Name', 'PLCTag': '@CL.PLCTag.Name', 'Rack': @CL.PLCTag.Rack, 'Slot': @CL.PLCTag.Slot, 'Point': @CL.PLCTag.Point, pq_cellcls: { "InstanceName": "info-readonly", "AttributeName": "info-readonly", "WWPLC": "info-readonly", "WWPLCTag": "info-readonly"}  };
                 indx++;
             }
             //called when save changes button is clicked.
             function saveChanges() {
                 var grid = $grid.pqGrid('getInstance').grid;
 
-                var datat = $("#grid_editing").pqGrid("getData", { dataIndx: ['InstanceName', 'AttributeName', 'WWPLC', 'WWPLCTag', 'PLC', 'PLCTag', 'Rack', 'Slot','Point'] });
+                var datat = $("#grid_editing").pqGrid("getData", { dataIndx: ['InstanceName', 'AttributeName', 'WWPLC', 'WWPLCTag', 'AssetName', 'PLC', 'PLCTag', 'Rack', 'Slot','Point'] });
                 var arrayLength = datat.length;
                 Postdata = [];
 
@@ -98,7 +98,8 @@
                                     Name: datat[i].PLC,
                                     ID: 0
                                 }
-                        }
+                        },
+                        AssetName : datat[i].AssetName
                     };
                 }
 
@@ -219,6 +220,13 @@
                     },
                     {
                         title: "WW PLC Tag", dataType: "string", dataIndx: "WWPLCTag", align: "center", editable: false, width: 80
+                    },
+                    {
+                        title: "Asset", width: 165, dataType: "string", align: "center", dataIndx: "AssetName", width: 80,
+                        validations: [
+                            { type: 'minLen', value: 1, msg: "Required" },
+                            { type: 'maxLen', value: 40, msg: "length should be <= 40" }
+                        ]
                     },
                     {
                         title: "PLC", width: 165, dataType: "string", align: "center", dataIndx: "PLC", width: 80,

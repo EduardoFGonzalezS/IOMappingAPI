@@ -28,35 +28,43 @@ namespace IOMappingWebApi.Controllers
         }
 
         // GET api/ObjectXML/'ObjectName'
-        [HttpGet]
-        [Route("{InstanceName}")]
-        public ActionResult Get(string InstanceName)
-        {
-            List<InstanceContent> ContentList = (List<InstanceContent>)Contents.EntityCollection.Where(c => c.Instance.Name == InstanceName).ToList();
+        //[HttpGet]
+        //[Route("{InstanceName}")]
+        //public ActionResult Get(string InstanceName)
+        //{
+        //    List<InstanceContent> ContentList = (List<InstanceContent>)Contents.EntityCollection.Where(c => c.Instance.Name == InstanceName).ToList();
 
-            GalaxyObjects GObjcts = new GalaxyObjects();
-            GObjcts.List = ContentList;
+        //    GalaxyObjects GObjcts = new GalaxyObjects();
+        //    GObjcts.List = ContentList;
 
-            XmlSerializer x = new XmlSerializer(GObjcts.List.GetType());
+        //    XmlSerializer x = new XmlSerializer(GObjcts.List.GetType());
 
-            XmlDocument doc = new XmlDocument();
-            System.IO.StringWriter sww = new System.IO.StringWriter();
-            XmlWriter writer = XmlWriter.Create(sww);
+        //    XmlDocument doc = new XmlDocument();
+        //    System.IO.StringWriter sww = new System.IO.StringWriter();
+        //    XmlWriter writer = XmlWriter.Create(sww);
 
-            x.Serialize(writer, GObjcts.List);
+        //    x.Serialize(writer, GObjcts.List);
 
-            return new ContentResult
-            {
-                Content = sww.ToString(),
-                ContentType = "application/xml"
-            };
-        }
+        //    return new ContentResult
+        //    {
+        //        Content = sww.ToString(),
+        //        ContentType = "application/xml"
+        //    };
+        //}
 
         // GET api/Object/
         [HttpGet]
-        public ActionResult Get()
+        public ActionResult Get([FromHeader] string InstanceCollection)
         {
-            List<InstanceContent> ContentList = (List<InstanceContent>)Contents.EntityCollection.Take(10000).OrderBy(c => c.Instance.Name).ToList();
+            System.Collections.ArrayList InsCol = Newtonsoft.Json.JsonConvert.DeserializeObject<System.Collections.ArrayList>(InstanceCollection);
+
+            List<InstanceContent> ContentListFromDB = (List<InstanceContent>)Contents.EntityCollection.Take(100000).OrderBy(c => c.Instance.Name).ToList();
+
+            List<string> Filter = InsCol.Cast<string>().ToList();
+
+            List<InstanceContent> ContentList = (from CL in ContentListFromDB.AsEnumerable()
+                                                 where Filter.Any(xx => xx.Contains(CL.Instance.Name))
+                                                 select CL).ToList();
 
             GalaxyObjects GObjcts = new GalaxyObjects();
             GObjcts.List = ContentList;

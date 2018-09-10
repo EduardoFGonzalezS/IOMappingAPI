@@ -47,9 +47,9 @@ D:\11 - Visual Studio Repositories\IOMappingAPI\IOMappingWebApi\bin\Debug\netcor
 D:\11 - Visual Studio Repositories\IOMappingAPI\IOMappingWebApi\bin\Debug\netcoreapp1.1\IOMappingWebApi.runtimeconfig.dev.json
 D:\11 - Visual Studio Repositories\IOMappingAPI\IOMappingWebApi\bin\Debug\netcoreapp1.1\IOMappingWebApi.dll
 D:\11 - Visual Studio Repositories\IOMappingAPI\IOMappingWebApi\bin\Debug\netcoreapp1.1\IOMappingWebApi.pdb
-D:\11 - Visual Studio Repositories\IOMappingAPI\IOMappingWebApi\obj\Debug\netcoreapp1.1\IOMappingWebApi.csprojAssemblyReference.cache
 D:\11 - Visual Studio Repositories\IOMappingAPI\IOMappingWebApi\obj\Debug\netcoreapp1.1\IOMappingWebApi.csproj.CoreCompileInputs.cache
 D:\11 - Visual Studio Repositories\IOMappingAPI\IOMappingWebApi\obj\Debug\netcoreapp1.1\IOMappingWebApi.AssemblyInfoInputs.cache
 D:\11 - Visual Studio Repositories\IOMappingAPI\IOMappingWebApi\obj\Debug\netcoreapp1.1\IOMappingWebApi.AssemblyInfo.cs
 D:\11 - Visual Studio Repositories\IOMappingAPI\IOMappingWebApi\obj\Debug\netcoreapp1.1\IOMappingWebApi.dll
 D:\11 - Visual Studio Repositories\IOMappingAPI\IOMappingWebApi\obj\Debug\netcoreapp1.1\IOMappingWebApi.pdb
+D:\11 - Visual Studio Repositories\IOMappingAPI\IOMappingWebApi\obj\Debug\netcoreapp1.1\IOMappingWebApi.csprojAssemblyReference.cache

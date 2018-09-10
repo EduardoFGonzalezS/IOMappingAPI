@@ -12,6 +12,7 @@ namespace IOMappingWebApi.Model
         void Insert(InstanceContent Entity);
         void PushToDbset(List<InstanceContent> Entities);
         int GetID(String InstanceName, String AttributeName);
+        string GetAssetName(String InstanceName, String AttributeName);
         List<InstanceContent> SurplusInDatabase(List<InstanceContent> _Contents);
         void DeleteList(List<InstanceContent> Entities);
         List<InstanceContent> GetListSyncFromDB(List<InstanceContent> _Entities);
@@ -105,6 +106,17 @@ namespace IOMappingWebApi.Model
             { return 0; }   
         }
 
+        public string GetAssetName(String InstanceName, String AttributeName)
+        {
+            var FoundEntity = context.Set<InstanceContent>()
+                .FirstOrDefault(e => e.Instance.Name == InstanceName && e.Attribute.Name == AttributeName);
+
+            if (FoundEntity != null)
+            { return FoundEntity.AssetName; }
+            else
+            { return ""; }
+        }
+
         // #05 - Methods (BULK Operations)
         /// <summary>
         /// Evaluates which records from "List() passed as parameter" are found on the database. 
@@ -125,6 +137,7 @@ namespace IOMappingWebApi.Model
                                db.AttributeID,db.Attribute,
                                ents.IOTagID,
                                ents.PLCTagID,
+                               ents.AssetName
                            })
                         .ToList().Select(e => new InstanceContent
                         {
@@ -132,7 +145,7 @@ namespace IOMappingWebApi.Model
                             InstanceID = e.InstanceID,Instance = e.Instance,
                             AttributeID = e.AttributeID, Attribute = e.Attribute,
 
-                            IOTagID = e.IOTagID, PLCTagID = e.PLCTagID,
+                            IOTagID = e.IOTagID, PLCTagID = e.PLCTagID, AssetName = e.AssetName
                         }).ToList();
 
 
@@ -254,7 +267,8 @@ namespace IOMappingWebApi.Model
                                                     PLCTag = Cont.PLCTag != null ? PLCTags.GetSyncFromDB(Cont.PLCTag) : null,
                                                     PLCTagID = Cont.PLCTag != null ? PLCTags.GetID(Cont.PLCTag.Name) : Cont.PLCTagID,
                                                     IOTag = IOTags.GetSyncFromDB(Cont.IOTag),
-                                                    IOTagID = IOTags.GetID(Cont.IOTag.Name)
+                                                    IOTagID = IOTags.GetID(Cont.IOTag.Name),
+                                                    AssetName = Cont.AssetName
                                                 }).ToList();
             return UpdatedList;
         }

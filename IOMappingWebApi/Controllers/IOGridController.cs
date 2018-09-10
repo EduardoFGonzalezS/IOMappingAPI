@@ -40,7 +40,8 @@ namespace IOMappingWebApi.Controllers
                     PLCTag = c.PLCTag ?? new PLCTag("N/A") { PLC = new PLC("N/A")},
                     PLCTagID = c.PLCTagID ?? 0,
                     IOTag = c.IOTag,
-                    IOTagID = c.IOTagID
+                    IOTagID = c.IOTagID,
+                    AssetName = c.AssetName
                 }).ToList();
 
             return View(ContentList);

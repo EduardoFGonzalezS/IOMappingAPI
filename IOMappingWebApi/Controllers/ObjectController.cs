@@ -25,10 +25,18 @@ namespace IOMappingWebApi.Controllers
 
         // GET api/Object/'ObjectName'
         [HttpGet]
-        [Route("{InstanceName}")]
-        public ActionResult Get(string InstanceName)
+        public ActionResult Get([FromHeader] string InstanceCollection)
         {
-            List<InstanceContent> ContentList = (List<InstanceContent>)Contents.EntityCollection.Where(c => c.Instance.Name == InstanceName).ToList();
+
+            System.Collections.ArrayList InsCol = Newtonsoft.Json.JsonConvert.DeserializeObject<System.Collections.ArrayList>(InstanceCollection);
+
+            List<InstanceContent> ContentListFromDB= (List<InstanceContent>)Contents.EntityCollection.Take(100000).OrderBy(c => c.Instance.Name).ToList();
+
+            List<string> Filter = InsCol.Cast<string>().ToList();
+
+            List<InstanceContent> ContentList = (from CL in ContentListFromDB.AsEnumerable()
+                      where Filter.Any(x => x.Contains(CL.Instance.Name))
+                      select CL).ToList();
 
             GalaxyObjects GObjcts = new GalaxyObjects();
             GObjcts.List = ContentList;
@@ -39,22 +47,40 @@ namespace IOMappingWebApi.Controllers
                 ContentType = "application/json"
             };
         }
+
+        //[HttpGet]
+        //[Route("{InstanceName}")]
+        //public ActionResult Get(string InstanceName)
+        //{
+        //    List<InstanceContent> ContentList = (List<InstanceContent>)Contents.EntityCollection.Where(c => c.Instance.Name == InstanceName).ToList();
+
+        //    GalaxyObjects GObjcts = new GalaxyObjects();
+        //    GObjcts.List = ContentList;
+
+        //    return new ContentResult
+        //    {
+        //        Content = Newtonsoft.Json.JsonConvert.SerializeObject(GObjcts),
+        //        ContentType = "application/json"
+        //    };
+        //}
 
         // GET api/Object/
-        [HttpGet]
-        public ActionResult Get()
-        {
-            List<InstanceContent> ContentList = (List<InstanceContent>)Contents.EntityCollection.Take(10000).OrderBy(c => c.Instance.Name).ToList();
 
-            GalaxyObjects GObjcts = new GalaxyObjects();
-            GObjcts.List = ContentList;
+
+        //[HttpGet]
+        //public ActionResult Get()
+        //{
+        //    List<InstanceContent> ContentList = (List<InstanceContent>)Contents.EntityCollection.Take(10000).OrderBy(c => c.Instance.Name).ToList();
+
+        //    GalaxyObjects GObjcts = new GalaxyObjects();
+        //    GObjcts.List = ContentList;
             
-            return new ContentResult
-            {
-                Content = Newtonsoft.Json.JsonConvert.SerializeObject(GObjcts),
-                ContentType = "application/json"
-            };
-        }
+        //    return new ContentResult
+        //    {
+        //        Content = Newtonsoft.Json.JsonConvert.SerializeObject(GObjcts),
+        //        ContentType = "application/json"
+        //    };
+        //}
 
         // POST api/Object/'Serialized Object'
         // Modified to be used only by DI Object deployment in System Platform 2017
@@ -99,7 +125,8 @@ namespace IOMappingWebApi.Controllers
                                                                         .Where(EC => EC.InstanceContentID == Contents.GetID(Cont.Instance.Name, Cont.Attribute.Name))
                                                                         .Select(EC => EC.PLCTagID).FirstOrDefault(),
                                                      IOTag = Contents.IOTags.GetSyncFromDB(Cont.IOTag),
-                                                     IOTagID = Contents.IOTags.GetID(Cont.IOTag.Name)
+                                                     IOTagID = Contents.IOTags.GetID(Cont.IOTag.Name),
+                                                     AssetName = Contents.GetAssetName(Cont.Instance.Name, Cont.Attribute.Name)
                                                  }).ToList();
 
             //Find contents that as NOT in the database, and insert them
