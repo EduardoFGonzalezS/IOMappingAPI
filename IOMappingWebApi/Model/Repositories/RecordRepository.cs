@@ -59,7 +59,7 @@ namespace IOMappingWebApi.Model
                 ctx.SaveChanges();
             }
         }
-        public int GetID(String Name)
+        public virtual int GetID(String Name)
         {
             var FoundEntity = context.Set<TEntity>().FirstOrDefault(e => e.Name == Name);
             int returnint;
@@ -85,7 +85,7 @@ namespace IOMappingWebApi.Model
         /// </summary>
         /// <param name="Entities"> Entities List() </param>
         /// <returns>Records from List() Parameter that are found on the Database</returns>  
-        public List<TEntity> InDatabase(List<TEntity> Entities)
+        public virtual List<TEntity> InDatabase(List<TEntity> Entities)
         {
             var Results = (from ents in Entities
                            join db in context.Set<TEntity>() on ents.Name equals db.Name
@@ -98,7 +98,7 @@ namespace IOMappingWebApi.Model
         /// </summary>
         /// <param name="Entities"> Entities List() </param>
         /// <returns>Records from List() Parameter that are NOT found on the Database</returns>  
-        public List<TEntity> NOTInDatabase(List<TEntity> Entities)
+        public virtual List<TEntity> NOTInDatabase(List<TEntity> Entities)
         {
             var Results = (from ents in Entities
                            join db in context.Set<TEntity>() on ents.Name equals db.Name

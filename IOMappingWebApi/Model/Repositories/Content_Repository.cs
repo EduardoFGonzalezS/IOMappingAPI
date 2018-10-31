@@ -146,7 +146,7 @@ namespace IOMappingWebApi.Model
                             AttributeID = e.AttributeID, Attribute = e.Attribute,
 
                             IOTagID = e.IOTagID, PLCTagID = e.PLCTagID, AssetName = e.AssetName
-                        }).ToList();
+                        }).Where(e => e.AttributeID > 0 && e.InstanceID > 0).ToList();
 
 
             return (List<InstanceContent>)Results;
@@ -167,7 +167,7 @@ namespace IOMappingWebApi.Model
                            new { AttributeID = db.AttributeID, InstanceID = db.InstanceID }
                            into DbResults
                            where !DbResults.Any()
-                           select ents).ToList();
+                           select ents).Where(e => e.AttributeID > 0 && e.InstanceID > 0).ToList();
             return (List<InstanceContent>)Results;
         }
 
@@ -180,7 +180,6 @@ namespace IOMappingWebApi.Model
                                                    && conts.Instance.ID == db.Instance.ID
                                                    && conts.IOTag.ID == db.IOTag.ID)
                            select conts);
-
 
             //var Surplus = EntityCollection
             //    .Where(conts => !_Contents.Any(ec => 

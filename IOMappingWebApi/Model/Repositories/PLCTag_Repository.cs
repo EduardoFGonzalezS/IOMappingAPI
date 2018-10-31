@@ -37,7 +37,7 @@ namespace IOMappingWebApi.Model
         {
             PLCTag ret = new PLCTag();
 
-            var FoundEntity = context.Set<PLCTag>().FirstOrDefault(e => e.Name == _Entity.Name);
+            var FoundEntity = context.Set<PLCTag>().FirstOrDefault(e => e.Name == _Entity.Name && e.PLC.Name == _Entity.PLC.Name);
             if (FoundEntity == null)
             {
                 ret = new PLCTag() {
@@ -98,6 +98,45 @@ namespace IOMappingWebApi.Model
                 List<PLCTag> Entities_inDb = InDatabase(EntsToPush);
                 if (Entities_inDb.Count > 0) { UpdateList(Entities_inDb); }
             }
+        }
+        
+        
+        // #05 - Methods (BULK Operations)
+        /// <summary>
+        /// Evaluates which records from "List() passed as parameter" are found on the database. 
+        /// </summary>
+        /// <param name="Entities"> Entities List() </param>
+        /// <returns>Records from List() Parameter that are found on the Database</returns>  
+        public override List<PLCTag> InDatabase(List<PLCTag> Entities)
+        {
+            var Results = (from ents in Entities
+                           join db in context.Set<PLCTag>()
+                           on
+                           new { Name = ents.Name, PLCName = ents.PLC.Name }
+                           equals
+                           new { Name = db.Name, PLCName = db.PLC.Name }
+                           select db).ToList();
+            return (List<PLCTag>)Results;
+        }
+
+        /// <summary>
+        /// Evaluates which records from "List() passed as parameter" are NOT found on the database. 
+        /// </summary>
+        /// <param name="Entities"> Entities List() </param>
+        /// <returns>Records from List() Parameter that are NOT found on the Database</returns>  
+        public override List<PLCTag> NOTInDatabase(List<PLCTag> Entities)
+        {
+            var Results = (from ents in Entities
+                           join db in context.Set<PLCTag>()
+                           on
+                           new { Name = ents.Name, PLCName = ents.PLC.Name }
+                           equals
+                           new { Name = db.Name, PLCName = db.PLC.Name }
+                           into DbResults
+                           where !DbResults.Any()
+                           select ents).GroupBy(e => e.Name).Select(e => e.First()).ToList();
+
+            return (List<PLCTag>)Results;
         }
     }
 }

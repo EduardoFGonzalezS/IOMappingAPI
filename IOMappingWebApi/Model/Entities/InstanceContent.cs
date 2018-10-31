@@ -26,12 +26,16 @@ namespace IOMappingWebApi.Model
 
         //Navigation Properties
         [XmlElement("Instance")]
+        [ForeignKey("InstanceID")]
         public Instance Instance { get; set; }
         [XmlElement("Attribute")]
+        [ForeignKey("AttributeID")]
         public Attribute Attribute { get; set; }
         [XmlElement("IOTag")]
+        [ForeignKey("IOTagID")]
         public IOTag IOTag { get; set; }
         [XmlElement("PLCTag")]
+        [ForeignKey("PLCTagID")]
         public PLCTag PLCTag { get; set; }
 
 
